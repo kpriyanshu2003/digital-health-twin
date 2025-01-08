@@ -1,0 +1,33 @@
+package nxt.abhranil.dhtapp.view.navigation
+
+import PatientDashboardScreen
+import androidx.compose.runtime.Composable
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
+import nxt.abhranil.dhtapp.view.screens.SigninScreen
+import nxt.abhranil.dhtapp.view.screens.SignupScreen
+
+@Composable
+fun DHTAppNavigation() {
+    val navController = rememberNavController()
+    NavHost(
+        navController = navController,
+        startDestination = if (FirebaseAuth.getInstance().currentUser == null) {
+            DHTAppScreens.SignupScreen.route
+        } else {
+            DHTAppScreens.PatientDashboardScreen.route
+        }
+    ) {
+        composable(DHTAppScreens.SigninScreen.route) {
+            SigninScreen(navController)
+        }
+        composable(DHTAppScreens.SignupScreen.route) {
+            SignupScreen(navController)
+        }
+        composable(DHTAppScreens.PatientDashboardScreen.route) {
+            PatientDashboardScreen(navController)
+        }
+    }
+}

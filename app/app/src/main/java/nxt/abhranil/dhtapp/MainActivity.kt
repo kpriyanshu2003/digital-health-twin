@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import nxt.abhranil.dhtapp.ui.theme.DHTAppTheme
+import nxt.abhranil.dhtapp.view.navigation.DHTAppNavigation
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DHTAppTheme {
-                PatientDashboardScreen()
+                DHTAppNavigation()
             }
         }
     }

@@ -1,5 +1,6 @@
-package nxt.abhranil.dhtapp
+package nxt.abhranil.dhtapp.view.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -7,8 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -21,18 +20,26 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import nxt.abhranil.dhtapp.R
+import nxt.abhranil.dhtapp.view.navigation.DHTAppScreens
+import nxt.abhranil.dhtapp.vm.LoginViewModel
 
 @Composable
-fun SignupScreen() {
+fun SigninScreen(navController: NavController,
+                 viewModel: LoginViewModel = viewModel()) {
+
+    val context = LocalContext.current
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var isChecked by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Card(
@@ -48,7 +55,6 @@ fun SignupScreen() {
             )
         }
 
-        // Main content
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -59,9 +65,8 @@ fun SignupScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Title
             Text(
-                text = "Create Your Digital Medical Twin!",
+                text = "Welcome back!",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF5F6ECF),
@@ -70,7 +75,6 @@ fun SignupScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Input fields
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -93,15 +97,6 @@ fun SignupScreen() {
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = confirmPassword,
-                onValueChange = { confirmPassword = it },
-                label = { Text("Confirm Password") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
-                singleLine = true
-            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -129,31 +124,23 @@ fun SignupScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Terms and Conditions
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
-                verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(
-                    checked = isChecked,
-                    onCheckedChange = { isChecked = it },
-                    colors = CheckboxDefaults.colors(checkmarkColor = Color(0xFF4A00E0))
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    lineHeight = 16.sp,
-                    text = "By creating an account you agree to the terms of use and our privacy policy",
-                    fontSize = 12.sp,
-                    color = Color.Gray
-                )
-            }
-
             Spacer(modifier = Modifier.height(16.dp))
 
             // Signup Button
             Button(
-                onClick = { /* Handle Signup */ },
+                onClick = {
+                    viewModel.signInWithEmailPass(email, password, error = {
+                        Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                    }) {
+                        Toast.makeText(context, "Sign in Successful!", Toast.LENGTH_LONG).show()
+                        navController.navigate(DHTAppScreens.PatientDashboardScreen.route) {
+                            popUpTo(DHTAppScreens.SigninScreen.route){
+                                inclusive = true
+                                saveState = true
+                            }
+                        }
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(
@@ -167,7 +154,7 @@ fun SignupScreen() {
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(
-                    text = "SignUp",
+                    text = "SignIn",
                     color = Color.White
                 )
             }
@@ -175,9 +162,16 @@ fun SignupScreen() {
             Spacer(modifier = Modifier.height(8.dp))
 
             // Sign In Navigation
-            TextButton(onClick = { /* Navigate to Sign In */ }) {
+            TextButton(onClick = {
+                navController.navigate(DHTAppScreens.SignupScreen.route) {
+                    popUpTo(DHTAppScreens.SigninScreen.route) {
+                        inclusive = true
+                        saveState = true
+                    }
+                }
+            }) {
                 Text(
-                    text = "Already have an account? Sign In",
+                    text = "Don't have an account? Sign Up",
                     color = Color(0xFF4A00E0)
                 )
             }

@@ -23,13 +23,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import nxt.abhranil.dhtapp.InfoCard
 import nxt.abhranil.dhtapp.MetricCard
 import nxt.abhranil.dhtapp.R
 import java.util.Calendar
 
 @Composable
-fun PatientDashboardScreen() {
+fun PatientDashboardScreen(navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxSize(),
