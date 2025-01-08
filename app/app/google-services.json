@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "696856045410",
+    "project_id": "dhtapp-3c560",
+    "storage_bucket": "dhtapp-3c560.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696856045410:android:df35b25f17573727f02e3b",
+        "android_client_info": {
+          "package_name": "nxt.abhranil.dhtapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696856045410-s8jtvarra35q2tff0oo22r0jdsv4a5ld.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "nxt.abhranil.dhtapp",
+            "certificate_hash": "e751ee1f1d7bbcc730e16892c0e602120c4dd70c"
+          }
+        },
+        {
+          "client_id": "696856045410-i42cos915vgkb28ir5t878ft7rksbjbp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD82Pyn8ShUt4nqcN_w-_J9Lf8Z9G_HUS4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696856045410-i42cos915vgkb28ir5t878ft7rksbjbp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
