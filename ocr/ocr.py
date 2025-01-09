@@ -133,75 +133,80 @@ def extract_details(text):
     doctor_phone = re.search(r"\s*(\d{10,13})", text)
     doctor_phone = doctor_phone.group(1).strip() if doctor_phone else None
 
-    # Extract vitals with the specified parameters
+    # Define vitals parameters and their units
     vitals_parameters = {
-        "BP": r"BP[:\s]+([\d/]+)",  # Excludes "mmHg"
-        "Pulse Rate": r"Pulse Rate[:\s]+([\d]+)",  # Excludes "bpm"
-        "Pulse Pattern": r"Pulse Pattern\s*:\s*([^\s]+)",  # No units
-        "Resp Rate": r"Resp Rate[:\s]+([\d]+)",  # Excludes "cycles/min"
-        "Resp Pattern": r"Resp Pattern\s*:\s*([^\s]+)",  # No units
-        "Temperature": r"(?:Temperature)\s*[:\-]?\s*(\d{1,3})",  # Excludes "Celsius"
-        "SpO2": r"SpO2[:\s]+([\d]+)",  # Excludes "%"
-        "RBS": r"(?:RBS)\s*[:\-]?\s*(\d{1,3})",  # Excludes "%"
-        "Weight": r"Weight[:\s]+([\d.]+)",  # Excludes "kg" or "lbs"
-        "BMI": r"BMI[:\s]+([\d.]+)",  # No units
-        "Blood Pressure": r"Blood Pressure[:\s]+([\d/]+)",  # Excludes "mmHg"
-        "PT/INR": r"PT/INR[:\s]+([\d.]+)",  # No units
-        "B-type Natriuretic Peptide": r"B-type Natriuretic Peptide[:\s]+([\d.]+)",  # Excludes "pg/mL"
-        "Sodium": r"Sodium[:\s]+([\d.]+)",  # Excludes "mmol/L"
-        "Potassium": r"Potassium[:\s]+([\d.]+)",  # Excludes "mmol/L"
-        "Blood Glucose": r"Blood Glucose[:\s]+([\d.]+)",  # Excludes "mg/dL"
-        "HbA1c": r"HbA1c[:\s]+([\d.]+)",  # Excludes "%"
-        "Creatinine": r"Creatinine[:\s]+([\d.]+)",  # Excludes "mg/dL"
-        "eGFR": r"eGFR[:\s]+([\d.]+)",  # Excludes "mL/min/1.73m²"
-        "Calcium Levels": r"Calcium Levels[:\s]+([\d.]+)",  # Excludes "mg/dL"
-        "Vitamin D": r"Vitamin D[:\s]+([\d.]+)",  # Excludes "ng/mL"
-        "Triglycerides": r"Triglycerides[:\s]+([\d.]+)",  # Excludes "mg/dL"
-        "HDL": r"HDL[:\s]+([\d.]+)",  # Excludes "mg/dL"
-        "LDL": r"LDL[:\s]+([\d.]+)",  # Excludes "mg/dL"
-        "VLDL": r"VLDL[:\s]+([\d.]+)",  # Excludes "mg/dL"
-        "Total Cholesterol": r"Total Cholesterol[:\s]+([\d.]+)",  # Excludes "mg/dL"
-        "Albumin": r"Albumin[:\s]+([\d.]+)",  # Excludes "g/dL"
-        "Globulin": r"Globulin[:\s]+([\d.]+)",  # Excludes "g/dL"
-        "A/G Ratio": r"A/G Ratio[:\s]+([\d.]+)",  # No units
-        "Bilirubin": r"Bilirubin[:\s]+([\d.]+)",  # Excludes "mg/dL"
-        "Alkaline Phosphatase": r"Alkaline Phosphatase[:\s]+([\d.]+)",  # Excludes "U/L"
-        "AST": r"AST[:\s]+([\d.]+)",  # Excludes "U/L"
-        "ALT": r"ALT[:\s]+([\d.]+)",  # Excludes "U/L"
-        "ESR": r"ESR[:\s]+([\d.]+)",  # Excludes "mm/hr"
-        "WBC Count": r"WBC Count[:\s]+([\d.]+)",  # Excludes "cells/μL"
-        "RBC Count": r"RBC Count[:\s]+([\d.]+)",  # Excludes "million/μL"
-        "Platelet Count": r"Platelet Count[:\s]+([\d.]+)",  # Excludes "cells/μL"
-        "Hemoglobin": r"Hemoglobin[:\s]+([\d.]+)",  # Excludes "g/dL"
-        "MCV": r"MCV[:\s]+([\d.]+)",  # Excludes "fL"
-        "MCH": r"MCH[:\s]+([\d.]+)",  # Excludes "pg"
-        "MCHC": r"MCHC[:\s]+([\d.]+)",  # Excludes "g/dL"
-        "RDW": r"RDW[:\s]+([\d.]+)",  # Excludes "%"
-        "Serum Calcium": r"Serum Calcium[:\s]+([\d.]+)",  # Excludes "mg/dL"
-        "Serum Magnesium": r"Serum Magnesium[:\s]+([\d.]+)",  # Excludes "mg/dL"
-        "Serum Phosphate": r"Serum Phosphate[:\s]+([\d.]+)",  # Excludes "mg/dL"
-        "Uric Acid": r"Uric Acid[:\s]+([\d.]+)",  # Excludes "mg/dL"
-        "Folic Acid": r"Folic Acid[:\s]+([\d.]+)",  # Excludes "ng/mL"
-        "Vitamin B12": r"Vitamin B12[:\s]+([\d.]+)",  # Excludes "pg/mL"
-        "TSH 3rd Generation": r"TSH 3rd Generation[:\s]+([\d.]+)",  # Excludes "mIU/L"
-        "Free Testosterone": r"Free Testosterone[:\s]+([\d.]+)",  # Excludes "pg/mL"
-        "Prostate-Specific Antigen": r"Prostate-Specific Antigen[:\s]+([\d.]+)",  # Excludes "ng/mL"
-        "D-Dimer": r"D-Dimer[:\s]+([\d.]+)",  # Excludes "ng/mL"
-        "Cortisol": r"Cortisol[:\s]+([\d.]+)",  # Excludes "μg/dL"
-        "Amylase": r"Amylase[:\s]+([\d.]+)",  # Excludes "U/L"
-        "Lipase": r"Lipase[:\s]+([\d.]+)",  # Excludes "U/L"
-        "Serum Iron": r"Serum Iron[:\s]+([\d.]+)",  # Excludes "μg/dL"
-        "Total Iron-Binding Capacity": r"Total Iron-Binding Capacity[:\s]+([\d.]+)",  # Excludes "μg/dL"
-        "Transferrin Saturation": r"Transferrin Saturation[:\s]+([\d.]+)",  # Excludes "%"
-        "Anti-TPO Antibodies": r"Anti-TPO Antibodies[:\s]+([\d.]+)",  # Excludes "IU/mL"
-        "Rheumatoid Factor": r"Rheumatoid Factor[:\s]+([\d.]+)",  # Excludes "IU/mL"
+        "BP": {"regex": r"BP[:\s]+([\d/]+)", "unit": "mmHg"},
+        "Pulse Rate": {"regex": r"Pulse Rate[:\s]+([\d]+)", "unit": "bpm"},
+        "Pulse Pattern": {"regex": r"Pulse Pattern\s*:\s*([^\s]+)", "unit": "No unit"},
+        "Resp Rate": {"regex": r"Resp Rate[:\s]+([\d]+)", "unit": "cycles/min"},
+        "Resp Pattern": {"regex": r"Resp Pattern\s*:\s*([^\s]+)", "unit": "No unit"},
+        "Temperature": {"regex": r"(?:Temperature)\s*[:\-]?\s*(\d{1,3})", "unit": "Celsius"},
+        "SpO2": {"regex": r"SpO2[:\s]+([\d]+)", "unit": "%"},
+        "RBS": {"regex": r"(?:RBS)\s*[:\-]?\s*(\d{1,3})", "unit": "%"},
+        "Weight": {"regex": r"Weight[:\s]+([\d.]+)", "unit": "kg"},
+        "BMI": {"regex": r"BMI[:\s]+([\d.]+)", "unit": "No unit"},
+        "Blood Pressure": {"regex": r"Blood Pressure[:\s]+([\d/]+)", "unit": "mmHg"},
+        "PT/INR": {"regex": r"PT/INR[:\s]+([\d.]+)", "unit": "No unit"},
+        "B-type Natriuretic Peptide": {"regex": r"B-type Natriuretic Peptide[:\s]+([\d.]+)", "unit": "pg/mL"},
+        "Sodium": {"regex": r"Sodium[:\s]+([\d.]+)", "unit": "mmol/L"},
+        "Potassium": {"regex": r"Potassium[:\s]+([\d.]+)", "unit": "mmol/L"},
+        "Blood Glucose": {"regex": r"Blood Glucose[:\s]+([\d.]+)", "unit": "mg/dL"},
+        "HbA1c": {"regex": r"HbA1c[:\s]+([\d.]+)", "unit": "%"},
+        "Creatinine": {"regex": r"Creatinine[:\s]+([\d.]+)", "unit": "mg/dL"},
+        "eGFR": {"regex": r"eGFR[:\s]+([\d.]+)", "unit": "mL/min/1.73m²"},
+        "Calcium Levels": {"regex": r"Calcium Levels[:\s]+([\d.]+)", "unit": "mg/dL"},
+        "Vitamin D": {"regex": r"Vitamin D[:\s]+([\d.]+)", "unit": "ng/mL"},
+        "Triglycerides": {"regex": r"Triglycerides[:\s]+([\d.]+)", "unit": "mg/dL"},
+        "HDL": {"regex": r"HDL[:\s]+([\d.]+)", "unit": "mg/dL"},
+        "LDL": {"regex": r"LDL[:\s]+([\d.]+)", "unit": "mg/dL"},
+        "VLDL": {"regex": r"VLDL[:\s]+([\d.]+)", "unit": "mg/dL"},
+        "Total Cholesterol": {"regex": r"Total Cholesterol[:\s]+([\d.]+)", "unit": "mg/dL"},
+        "Albumin": {"regex": r"Albumin[:\s]+([\d.]+)", "unit": "g/dL"},
+        "Globulin": {"regex": r"Globulin[:\s]+([\d.]+)", "unit": "g/dL"},
+        "A/G Ratio": {"regex": r"A/G Ratio[:\s]+([\d.]+)", "unit": "No unit"},
+        "Bilirubin": {"regex": r"Bilirubin[:\s]+([\d.]+)", "unit": "mg/dL"},
+        "Alkaline Phosphatase": {"regex": r"Alkaline Phosphatase[:\s]+([\d.]+)", "unit": "U/L"},
+        "AST": {"regex": r"AST[:\s]+([\d.]+)", "unit": "U/L"},
+        "ALT": {"regex": r"ALT[:\s]+([\d.]+)", "unit": "U/L"},
+        "ESR": {"regex": r"ESR[:\s]+([\d.]+)", "unit": "mm/hr"},
+        "WBC Count": {"regex": r"WBC Count[:\s]+([\d.]+)", "unit": "cells/μL"},
+        "RBC Count": {"regex": r"RBC Count[:\s]+([\d.]+)", "unit": "million/μL"},
+        "Platelet Count": {"regex": r"Platelet Count[:\s]+([\d.]+)", "unit": "cells/μL"},
+        "Hemoglobin": {"regex": r"Hemoglobin[:\s]+([\d.]+)", "unit": "g/dL"},
+        "MCV": {"regex": r"MCV[:\s]+([\d.]+)", "unit": "fL"},
+        "MCH": {"regex": r"MCH[:\s]+([\d.]+)", "unit": "pg"},
+        "MCHC": {"regex": r"MCHC[:\s]+([\d.]+)", "unit": "g/dL"},
+        "RDW": {"regex": r"RDW[:\s]+([\d.]+)", "unit": "%"},
+        "Serum Calcium": {"regex": r"Serum Calcium[:\s]+([\d.]+)", "unit": "mg/dL"},
+        "Serum Magnesium": {"regex": r"Serum Magnesium[:\s]+([\d.]+)", "unit": "mg/dL"},
+        "Serum Phosphate": {"regex": r"Serum Phosphate[:\s]+([\d.]+)", "unit": "mg/dL"},
+        "Uric Acid": {"regex": r"Uric Acid[:\s]+([\d.]+)", "unit": "mg/dL"},
+        "Folic Acid": {"regex": r"Folic Acid[:\s]+([\d.]+)", "unit": "ng/mL"},
+        "Vitamin B12": {"regex": r"Vitamin B12[:\s]+([\d.]+)", "unit": "pg/mL"},
+        "TSH 3rd Generation": {"regex": r"TSH 3rd Generation[:\s]+([\d.]+)", "unit": "mIU/L"},
+        "Free Testosterone": {"regex": r"Free Testosterone[:\s]+([\d.]+)", "unit": "pg/mL"},
+        "Prostate-Specific Antigen": {"regex": r"Prostate-Specific Antigen[:\s]+([\d.]+)", "unit": "ng/mL"},
+        "D-Dimer": {"regex": r"D-Dimer[:\s]+([\d.]+)", "unit": "ng/mL"},
+        "Cortisol": {"regex": r"Cortisol[:\s]+([\d.]+)", "unit": "μg/dL"},
+        "Amylase": {"regex": r"Amylase[:\s]+([\d.]+)", "unit": "U/L"},
+        "Lipase": {"regex": r"Lipase[:\s]+([\d.]+)", "unit": "U/L"},
+        "Serum Iron": {"regex": r"Serum Iron[:\s]+([\d.]+)", "unit": "μg/dL"},
+        "Total Iron-Binding Capacity": {"regex": r"Total Iron-Binding Capacity[:\s]+([\d.]+)", "unit": "μg/dL"},
+        "Transferrin Saturation": {"regex": r"Transferrin Saturation[:\s]+([\d.]+)", "unit": "%"},
+        "Anti-TPO Antibodies": {"regex": r"Anti-TPO Antibodies[:\s]+([\d.]+)", "unit": "IU/mL"},
+        "Rheumatoid Factor": {"regex": r"Rheumatoid Factor[:\s]+([\d.]+)", "unit": "IU/mL"}
     }
 
-    vitals = {}
-    for param, regex in vitals_parameters.items():
-        match = re.search(regex, text, re.IGNORECASE)
+    # Extract vitals
+    vitals = []
+    for param, details in vitals_parameters.items():
+        match = re.search(details["regex"], text, re.IGNORECASE)
         if match:
-            vitals[param] = match.group(1).strip()
+            vitals.append({
+                "name": param,
+                "value": match.group(1).strip(),
+                "unit": details["unit"]
+            })
 
     # Extract complaints as a list
     complaints = re.findall(r"Complaints (.+?)(?:\n|$)", text)
