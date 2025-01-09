@@ -1,7 +1,7 @@
 package nxt.abhranil.dhtapp.data.model
 
-data class DataX(
-    val Appointments: List<Appointment>,
+data class ConditionX(
+    val Appointments: List<AppointmentXXX>,
     val createdAt: String,
     val id: String,
     val imageUrl: Any,

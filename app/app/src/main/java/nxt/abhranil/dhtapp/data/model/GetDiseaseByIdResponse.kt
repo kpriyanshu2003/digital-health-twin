@@ -1,6 +1,6 @@
 package nxt.abhranil.dhtapp.data.model
 
 data class GetDiseaseByIdResponse(
-    val `data`: DataX,
+    val `data`: DataXXX,
     val message: String
 )
