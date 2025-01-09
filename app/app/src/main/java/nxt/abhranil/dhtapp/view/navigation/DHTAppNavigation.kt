@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
+import nxt.abhranil.dhtapp.view.screens.AppointmentDetailsScreen
 import nxt.abhranil.dhtapp.view.screens.AppointmentUploadScreen
 import nxt.abhranil.dhtapp.view.screens.BodyMetricsScreen
 import nxt.abhranil.dhtapp.view.screens.DiseaseDetailScreen
@@ -47,6 +48,16 @@ fun DHTAppNavigation() {
             backStackEntry.arguments?.getString("diseaseID").let {
                 if(it != null)
                     DiseaseDetailScreen(navController, diseaseId = it)
+            }
+        }
+
+        val appointmentDetailScreen = DHTAppScreens.AppointmentDetailScreen.route
+        composable("$appointmentDetailScreen/{appointmentID}", arguments = listOf(navArgument(name = "appointmentID") {
+            type = NavType.StringType
+        })) { backStackEntry ->
+            backStackEntry.arguments?.getString("appointmentID").let {
+                if(it != null)
+                    AppointmentDetailsScreen(navController, appointmentId = it)
             }
         }
     }

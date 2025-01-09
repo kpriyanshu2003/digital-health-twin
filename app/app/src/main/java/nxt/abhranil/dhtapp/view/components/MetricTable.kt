@@ -12,16 +12,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import nxt.abhranil.dhtapp.view.screens.Metric
+import nxt.abhranil.dhtapp.data.model.Result
 
 @Composable
-fun MetricTable(metrics: List<Metric>) {
+fun MetricTable(labResults: List<Result>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        metrics.forEachIndexed { index, metric ->
+        labResults.forEachIndexed { index, metric ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -30,13 +30,13 @@ fun MetricTable(metrics: List<Metric>) {
             ) {
                 // Metric Name Column
                 Text(
-                    text = metric.metricName,
+                    text = metric.name,
                     modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.bodyMedium
                 )
                 // Metric Value Column
                 Text(
-                    text = metric.quant,
+                    text = metric.value,
                     modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.End

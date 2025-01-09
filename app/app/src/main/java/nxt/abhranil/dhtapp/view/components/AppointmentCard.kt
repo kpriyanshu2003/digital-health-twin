@@ -22,11 +22,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun AppointmentCard(
+    modifier: Modifier,
     name: String,
     date: String,
     doctor: String
 ) {
-    OutlinedCard(modifier = Modifier
+    OutlinedCard(modifier = modifier
         .fillMaxWidth(),
         colors = CardDefaults.cardColors(Color(0xFFF1F1F1)),
         border = BorderStroke(1.dp, Color.Transparent),

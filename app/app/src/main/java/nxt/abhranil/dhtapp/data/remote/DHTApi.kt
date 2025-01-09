@@ -3,6 +3,7 @@ package nxt.abhranil.dhtapp.data.remote
 import nxt.abhranil.dhtapp.data.model.CommonResponse
 import nxt.abhranil.dhtapp.data.model.CreateUser
 import nxt.abhranil.dhtapp.data.model.DiseaseCreate
+import nxt.abhranil.dhtapp.data.model.GetAppointmentByIdResponse
 import nxt.abhranil.dhtapp.data.model.GetDiseaseByIdResponse
 import nxt.abhranil.dhtapp.data.model.GetUserDiseaseResponse
 import okhttp3.MultipartBody
@@ -44,4 +45,10 @@ interface DHTApi {
         @Header("Authorization") token: String,
         @Path("diseaseID") diseaseID: String
     ) : Response<GetDiseaseByIdResponse>
+
+    @GET("appointments/{appointmentID}")
+    suspend fun getAppointmentById(
+        @Header("Authorization") token: String,
+        @Path("appointmentID") appointmentID: String
+    ) : Response<GetAppointmentByIdResponse>
 }
