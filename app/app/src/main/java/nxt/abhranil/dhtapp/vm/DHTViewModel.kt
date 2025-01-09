@@ -13,6 +13,7 @@ import nxt.abhranil.dhtapp.data.model.DiseaseCreate
 import nxt.abhranil.dhtapp.data.model.GetAllAppointmentsResponse
 import nxt.abhranil.dhtapp.data.model.GetAppointmentByIdResponse
 import nxt.abhranil.dhtapp.data.model.GetDiseaseByIdResponse
+import nxt.abhranil.dhtapp.data.model.GetPastDoctorsResponse
 import nxt.abhranil.dhtapp.data.model.GetPersonalisedTipsResponse
 import nxt.abhranil.dhtapp.data.model.GetUserDiseaseResponse
 import nxt.abhranil.dhtapp.data.repo.DHTRepository
@@ -158,6 +159,26 @@ class DHTViewModel @Inject constructor(private val repo: DHTRepository): ViewMod
                 _getPersonaliedTipsResponse.value = repo.getPersonalisedTips(token)
             } catch (e: Exception) {
                 Log.d("DHTViewModel", "getAllTips: ${e.message}")
+            }
+        }
+    }
+
+    private val _getPastDoctorResponse: MutableStateFlow<UiState<GetPastDoctorsResponse>> =
+        MutableStateFlow(UiState.Idle)
+    val getPassDoctorResponse = _getPastDoctorResponse.asStateFlow()
+
+    fun getAllPastDoctors(token: String) {
+        getAllPast(token)
+    }
+
+    private fun getAllPast(token: String) {
+        _getPastDoctorResponse.value = UiState.Loading
+
+        viewModelScope.launch {
+            try {
+                _getPastDoctorResponse.value = repo.getPastDoctors(token)
+            } catch (e: Exception) {
+                Log.d("DHTViewModel", "getAllPast: ${e.message}")
             }
         }
     }

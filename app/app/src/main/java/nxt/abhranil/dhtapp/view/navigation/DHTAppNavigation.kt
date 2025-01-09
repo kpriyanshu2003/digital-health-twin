@@ -14,6 +14,7 @@ import nxt.abhranil.dhtapp.view.screens.BodyMetricsScreen
 import nxt.abhranil.dhtapp.view.screens.DiseaseDetailScreen
 import nxt.abhranil.dhtapp.view.screens.GetPersonalisedTipsScreen
 import nxt.abhranil.dhtapp.view.screens.MedicalHistoryScreen
+import nxt.abhranil.dhtapp.view.screens.PreviousDoctorsScreen
 import nxt.abhranil.dhtapp.view.screens.SigninScreen
 import nxt.abhranil.dhtapp.view.screens.SignupScreen
 
@@ -50,6 +51,10 @@ fun DHTAppNavigation() {
 
         composable(DHTAppScreens.GetPersonalisedTipsScreen.route) {
             GetPersonalisedTipsScreen(navController)
+        }
+
+        composable(DHTAppScreens.PreviousDoctorsScreen.route) {
+            PreviousDoctorsScreen(navController)
         }
 
         val detailScreen = DHTAppScreens.DiseaseDetailScreen.route

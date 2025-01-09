@@ -327,7 +327,7 @@ fun PatientDashboardScreen(navController: NavController,
             }
 
             Button(
-                onClick = {  },
+                onClick = { navController.navigate(DHTAppScreens.PreviousDoctorsScreen.route)  },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
