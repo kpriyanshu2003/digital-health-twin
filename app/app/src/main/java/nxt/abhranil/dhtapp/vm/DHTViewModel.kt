@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import nxt.abhranil.dhtapp.data.model.CommonResponse
 import nxt.abhranil.dhtapp.data.model.CreateUser
 import nxt.abhranil.dhtapp.data.model.DiseaseCreate
+import nxt.abhranil.dhtapp.data.model.GetDiseaseByIdResponse
 import nxt.abhranil.dhtapp.data.model.GetUserDiseaseResponse
 import nxt.abhranil.dhtapp.data.repo.DHTRepository
 import nxt.abhranil.dhtapp.data.utils.UiState
@@ -74,6 +75,26 @@ class DHTViewModel @Inject constructor(private val repo: DHTRepository): ViewMod
                 _getUserDiseaseResponse.value = repo.getUserDiseases(token)
             } catch (e: Exception) {
                 Log.d("DHTViewModel", "getUserDiseaseDetails: ${e.message}")
+            }
+        }
+    }
+
+    private val _getDiseaseByIdResponse: MutableStateFlow<UiState<GetDiseaseByIdResponse>> = MutableStateFlow(
+        UiState.Idle)
+    val getDiseaseByIdResponse = _getDiseaseByIdResponse.asStateFlow()
+
+    fun getDiseaseById(token: String, diseaseID: String) {
+        getDiseaseByIdDetails(token, diseaseID)
+    }
+
+    private fun getDiseaseByIdDetails(token: String, diseaseID: String) {
+        _getDiseaseByIdResponse.value = UiState.Loading
+
+        viewModelScope.launch {
+            try {
+                _getDiseaseByIdResponse.value = repo.getDiseaseById(token, diseaseID)
+            } catch (e: Exception) {
+                Log.d("DHTViewModel", "getDiseaseByIdDetails: ${e.message}")
             }
         }
     }

@@ -2,6 +2,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +39,7 @@ import nxt.abhranil.dhtapp.data.model.Result
 import nxt.abhranil.dhtapp.data.utils.UiState
 import nxt.abhranil.dhtapp.view.components.InfoCard
 import nxt.abhranil.dhtapp.view.components.MetricCard
+import nxt.abhranil.dhtapp.view.navigation.DHTAppScreens
 import nxt.abhranil.dhtapp.vm.DHTViewModel
 import java.util.Calendar
 
@@ -93,6 +95,7 @@ fun PatientDashboardScreen(navController: NavController,
 
             is UiState.Loading -> {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Spacer(modifier = Modifier.height(32.dp))
                     Text(
                         text = "Loading....",
                         fontWeight = FontWeight.Medium,
@@ -137,7 +140,10 @@ fun PatientDashboardScreen(navController: NavController,
                         .horizontalScroll(scrollableState)
                 ) {
                     data.data.data.condition.forEach {
-                        InfoCard(disease = it.name, medication = it.medication.toString())
+                        InfoCard(modifier = Modifier
+                            .clickable{
+                                navController.navigate(DHTAppScreens.DiseaseDetailScreen.route + "/${it.id}")
+                            }, disease = it.name, medication = it.medication.toString())
                     }
                 }
 
@@ -189,23 +195,6 @@ fun PatientDashboardScreen(navController: NavController,
 
     @Composable
     fun HealthMetricsGrid(listOfMetrics: List<Result>) {
-        data class Metric(
-            val value: String,
-            val unit: String,
-            val label: String
-        )
-
-        val metricsList = listOf<Metric>(
-            Metric(listOfMetrics[1].value, "mmHg", "Blood Pressure"),
-            Metric("85", "bpm", "Heart Rate"),
-            Metric("94", "%", "Oxygen Generation"),
-            Metric("80.5", "kg", "Weight"),
-            Metric("24.75", "", "BMI"),
-            Metric("6.0", "mg/dL", "Uric Acid"),
-            Metric("138", "mmol/L", "Sodium"),
-            Metric("4.5", "mmol/L", "Potassium"),
-            Metric("200", "mg/dL", "Cholesterol")
-        )
 
         Row(
             horizontalArrangement = Arrangement.Start,
@@ -228,11 +217,12 @@ fun PatientDashboardScreen(navController: NavController,
             }
 
             Column(
-                verticalArrangement = Arrangement.SpaceEvenly
+                horizontalAlignment = Alignment.Start
             ) {
                 for (i in listOfMetrics.chunked(3)) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(4.dp),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         i.forEach { metric ->

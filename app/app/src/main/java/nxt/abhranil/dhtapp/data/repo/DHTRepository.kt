@@ -3,6 +3,7 @@ package nxt.abhranil.dhtapp.data.repo
 import nxt.abhranil.dhtapp.data.model.CommonResponse
 import nxt.abhranil.dhtapp.data.model.CreateUser
 import nxt.abhranil.dhtapp.data.model.DiseaseCreate
+import nxt.abhranil.dhtapp.data.model.GetDiseaseByIdResponse
 import nxt.abhranil.dhtapp.data.model.GetUserDiseaseResponse
 import nxt.abhranil.dhtapp.data.remote.DHTApi
 import nxt.abhranil.dhtapp.data.utils.UiState
@@ -37,6 +38,17 @@ class DHTRepository @Inject constructor(private val api: DHTApi) {
     suspend fun getUserDiseases(token: String) : UiState<GetUserDiseaseResponse> {
         val response = api.getUserDiseases(
             token = token
+        )
+        if (response.isSuccessful)
+            return UiState.Success(response.body()!!)
+        else
+            return UiState.Error(response.message())
+    }
+
+    suspend fun getDiseaseById(token: String, diseaseID: String) : UiState<GetDiseaseByIdResponse> {
+        val response = api.getDiseaseById(
+            token = token,
+            diseaseID = diseaseID
         )
         if (response.isSuccessful)
             return UiState.Success(response.body()!!)

@@ -24,11 +24,12 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun InfoCard(
+    modifier: Modifier,
     disease: String,
     medication: String
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .width(330.dp)
             .height(110.dp)
             .clip(RoundedCornerShape(12.dp))

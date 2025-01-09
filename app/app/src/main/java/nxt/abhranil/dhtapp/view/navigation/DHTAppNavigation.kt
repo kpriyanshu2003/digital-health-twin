@@ -2,12 +2,15 @@ package nxt.abhranil.dhtapp.view.navigation
 
 import PatientDashboardScreen
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 import nxt.abhranil.dhtapp.view.screens.AppointmentUploadScreen
 import nxt.abhranil.dhtapp.view.screens.BodyMetricsScreen
+import nxt.abhranil.dhtapp.view.screens.DiseaseDetailScreen
 import nxt.abhranil.dhtapp.view.screens.SigninScreen
 import nxt.abhranil.dhtapp.view.screens.SignupScreen
 
@@ -36,6 +39,15 @@ fun DHTAppNavigation() {
         }
         composable(DHTAppScreens.AppointmentUploadScreen.route) {
             AppointmentUploadScreen(navController)
+        }
+        val detailScreen = DHTAppScreens.DiseaseDetailScreen.route
+        composable("$detailScreen/{diseaseID}", arguments = listOf(navArgument(name = "diseaseID") {
+            type = NavType.StringType
+        })) { backStackEntry ->
+            backStackEntry.arguments?.getString("diseaseID").let {
+                if(it != null)
+                    DiseaseDetailScreen(navController, diseaseId = it)
+            }
         }
     }
 }
