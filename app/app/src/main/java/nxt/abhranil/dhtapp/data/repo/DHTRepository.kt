@@ -3,6 +3,7 @@ package nxt.abhranil.dhtapp.data.repo
 import nxt.abhranil.dhtapp.data.model.CommonResponse
 import nxt.abhranil.dhtapp.data.model.CreateUser
 import nxt.abhranil.dhtapp.data.model.DiseaseCreate
+import nxt.abhranil.dhtapp.data.model.GetAllAppointmentsResponse
 import nxt.abhranil.dhtapp.data.model.GetAppointmentByIdResponse
 import nxt.abhranil.dhtapp.data.model.GetDiseaseByIdResponse
 import nxt.abhranil.dhtapp.data.model.GetUserDiseaseResponse
@@ -61,6 +62,16 @@ class DHTRepository @Inject constructor(private val api: DHTApi) {
         val response = api.getAppointmentById(
             token = token,
             appointmentID = appointmentID
+        )
+        if (response.isSuccessful)
+            return UiState.Success(response.body()!!)
+        else
+            return UiState.Error(response.message())
+    }
+
+    suspend fun getAllAppointments(token: String) : UiState<GetAllAppointmentsResponse> {
+        val response = api.getAllAppointments(
+            token = token
         )
         if (response.isSuccessful)
             return UiState.Success(response.body()!!)

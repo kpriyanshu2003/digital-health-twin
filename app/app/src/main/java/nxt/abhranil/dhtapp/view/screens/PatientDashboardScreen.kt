@@ -177,7 +177,7 @@ fun PatientDashboardScreen(navController: NavController,
                             Spacer(modifier = Modifier.height(16.dp))
 
                             // Buttons
-                            ActionButtons()
+                            ActionButtons(navController)
                         }
                     }
 
@@ -287,10 +287,10 @@ fun PatientDashboardScreen(navController: NavController,
     }
 
     @Composable
-    fun ActionButtons() {
+    fun ActionButtons(navController: NavController) {
         Column {
             Button(
-                onClick = { /* View Medical History Action */ },
+                onClick = { navController.navigate(DHTAppScreens.MedicalHistoryScreen.route) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),

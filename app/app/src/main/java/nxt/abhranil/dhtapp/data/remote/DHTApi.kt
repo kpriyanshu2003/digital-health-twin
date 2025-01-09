@@ -3,6 +3,7 @@ package nxt.abhranil.dhtapp.data.remote
 import nxt.abhranil.dhtapp.data.model.CommonResponse
 import nxt.abhranil.dhtapp.data.model.CreateUser
 import nxt.abhranil.dhtapp.data.model.DiseaseCreate
+import nxt.abhranil.dhtapp.data.model.GetAllAppointmentsResponse
 import nxt.abhranil.dhtapp.data.model.GetAppointmentByIdResponse
 import nxt.abhranil.dhtapp.data.model.GetDiseaseByIdResponse
 import nxt.abhranil.dhtapp.data.model.GetUserDiseaseResponse
@@ -51,4 +52,9 @@ interface DHTApi {
         @Header("Authorization") token: String,
         @Path("appointmentID") appointmentID: String
     ) : Response<GetAppointmentByIdResponse>
+
+    @GET("appointments")
+    suspend fun getAllAppointments(
+        @Header("Authorization") token: String
+    ) : Response<GetAllAppointmentsResponse>
 }

@@ -8,4 +8,5 @@ sealed class DHTAppScreens(val route: String) {
     object AppointmentUploadScreen : DHTAppScreens("appointment_upload_screen")
     object DiseaseDetailScreen : DHTAppScreens("disease_detail_screen")
     object AppointmentDetailScreen : DHTAppScreens("appointment_detail_screen")
+    object MedicalHistoryScreen : DHTAppScreens("medical_history_screen")
 }
