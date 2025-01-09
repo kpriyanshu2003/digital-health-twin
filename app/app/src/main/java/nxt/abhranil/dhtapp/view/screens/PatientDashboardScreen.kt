@@ -24,8 +24,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import nxt.abhranil.dhtapp.InfoCard
-import nxt.abhranil.dhtapp.MetricCard
+import nxt.abhranil.dhtapp.view.components.InfoCard
+import nxt.abhranil.dhtapp.view.components.MetricCard
 import nxt.abhranil.dhtapp.R
 import java.util.Calendar
 

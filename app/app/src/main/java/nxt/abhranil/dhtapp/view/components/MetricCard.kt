@@ -1,4 +1,4 @@
-package nxt.abhranil.dhtapp
+package nxt.abhranil.dhtapp.view.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

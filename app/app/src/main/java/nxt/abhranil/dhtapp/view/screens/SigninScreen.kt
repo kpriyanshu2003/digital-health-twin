@@ -61,9 +61,7 @@ fun SigninScreen(navController: NavController,
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(400.dp))
-
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(416.dp))
 
             Text(
                 text = "Welcome back!",
