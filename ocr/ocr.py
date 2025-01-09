@@ -135,90 +135,66 @@ def extract_details(text):
 
     # Extract vitals with the specified parameters
     vitals_parameters = {
-        "BP": r"BP[:\s]+([\d/]+\s?mmHg)",
-        "Pulse Rate": r"Pulse Rate[:\s]+([\d]+\s?bpm)",
-        "Pulse Pattern": r"Pulse Pattern\s*:\s*([^\s]+)",
-        "Resp Rate": r"Resp Rate[:\s]+([\d]+\s?cycles/min)",
-        "Resp Pattern": r"Resp Pattern\s*:\s*([^\s]+)",
-        "Temperature": r"(?:Temperature)\s*[:\-]?\s*(\d{1,3}\s*Celsius)",
-        "SpO2": r"SpO2[:\s]+([\d]+\s?%)",
-        "RBS": r"(?:RBS)\s*[:\-]?\s*(\d{1,3}%?)",
-        "Weight": r"Weight[:\s]+([\d.]+\s?(?:kg|lbs))",
-        "BMI": r"BMI[:\s]+([\d.]+)",
-        "Blood Pressure": r"Blood Pressure[:\s]+([\d/]+\s?mmHg)",
-        "PT/INR": r"PT/INR[:\s]+([\d.]+)",
-        "B-type Natriuretic Peptide": r"B-type Natriuretic Peptide[:\s]+([\d.]+\s?pg/mL)",
-        "Sodium": r"Sodium[:\s]+([\d.]+\s?mmol/L)",
-        "Potassium": r"Potassium[:\s]+([\d.]+\s?mmol/L)",
-        "Blood Glucose": r"Blood Glucose[:\s]+([\d.]+\s?mg/dL)",
-        "HbA1c": r"HbA1c[:\s]+([\d.]+\s?%)",
-        "Lipid Profile": r"Lipid Profile[:\s]+([^\n]+)",
-        "Renal Function Tests": r"Renal Function Tests[:\s]+([^\n]+)",
-        "Creatinine": r"Creatinine[:\s]+([\d.]+\s?mg/dL)",
-        "eGFR": r"eGFR[:\s]+([\d.]+\s?mL/min/1.73m²)",
-        "Urinalysis": r"Urinalysis[:\s]+([^\n]+)",
-        "Liver Function Tests": r"Liver Function Tests[:\s]+([^\n]+)",
-        "Viral Markers": r"Viral Markers[:\s]+([^\n]+)",
-        "TSH": r"TSH[:\s]+([\d.]+\s?mIU/L)",
-        "Free T3": r"Free T3[:\s]+([\d.]+\s?pg/mL)",
-        "Free T4": r"Free T4[:\s]+([\d.]+\s?ng/dL)",
-        "CRP": r"C-Reactive Protein[:\s]+([\d.]+\s?mg/L)",
-        "CBC": r"CBC[:\s]+([^\n]+)",
-        "Ferritin": r"Ferritin[:\s]+([\d.]+\s?ng/mL)",
-        "Iron Studies": r"Iron Studies[:\s]+([^\n]+)",
-        "ECG": r"ECG[:\s]+([^\n]+)",
-        "Cardiac Enzymes": r"Cardiac Enzymes[:\s]+([^\n]+)",
-        "Bone Density Test": r"Bone Density Test[:\s]+([^\n]+)",
-        "Calcium Levels": r"Calcium Levels[:\s]+([\d.]+\s?mg/dL)",
-        "Vitamin D": r"Vitamin D[:\s]+([\d.]+\s?ng/mL)",
-        "Visual Acuity": r"Visual Acuity[:\s]+([^\n]+)",
-        "Slit Lamp": r"Slit Lamp[:\s]+([^\n]+)",
-        "Retinal Exam": r"Retinal Exam[:\s]+([^\n]+)",
-        "Tonometry": r"Tonometry[:\s]+([\d.]+\s?mmHg)",
-        "Culture Tests": r"Culture Tests[:\s]+([^\n]+)",
-        "Contrast Sensitivity Test": r"Contrast Sensitivity Test[:\s]+([^\n]+)",
-        "Triglycerides": r"Triglycerides[:\s]+([\d.]+\s?mg/dL)",
-        "HDL": r"HDL[:\s]+([\d.]+\s?mg/dL)",
-        "LDL": r"LDL[:\s]+([\d.]+\s?mg/dL)",
-        "VLDL": r"VLDL[:\s]+([\d.]+\s?mg/dL)",
-        "Total Cholesterol": r"Total Cholesterol[:\s]+([\d.]+\s?mg/dL)",
-        "Albumin": r"Albumin[:\s]+([\d.]+\s?g/dL)",
-        "Globulin": r"Globulin[:\s]+([\d.]+\s?g/dL)",
-        "A/G Ratio": r"A/G Ratio[:\s]+([\d.]+)",
-        "Bilirubin": r"Bilirubin[:\s]+([\d.]+\s?mg/dL)",
-        "Alkaline Phosphatase": r"Alkaline Phosphatase[:\s]+([\d.]+\s?U/L)",
-        "AST": r"AST[:\s]+([\d.]+\s?U/L)",
-        "ALT": r"ALT[:\s]+([\d.]+\s?U/L)",
-        "ESR": r"ESR[:\s]+([\d.]+\s?mm/hr)",
-        "WBC Count": r"WBC Count[:\s]+([\d.]+\s?cells/μL)",
-        "RBC Count": r"RBC Count[:\s]+([\d.]+\s?million/μL)",
-        "Platelet Count": r"Platelet Count[:\s]+([\d.]+\s?cells/μL)",
-        "Hemoglobin": r"Hemoglobin[:\s]+([\d.]+\s?g/dL)",
-        "MCV": r"MCV[:\s]+([\d.]+\s?fL)",
-        "MCH": r"MCH[:\s]+([\d.]+\s?pg)",
-        "MCHC": r"MCHC[:\s]+([\d.]+\s?g/dL)",
-        "RDW": r"RDW[:\s]+([\d.]+\s?%)",
-        "Serum Calcium": r"Serum Calcium[:\s]+([\d.]+\s?mg/dL)",
-        "Serum Magnesium": r"Serum Magnesium[:\s]+([\d.]+\s?mg/dL)",
-        "Serum Phosphate": r"Serum Phosphate[:\s]+([\d.]+\s?mg/dL)",
-        "Uric Acid": r"Uric Acid[:\s]+([\d.]+\s?mg/dL)",
-        "Folic Acid": r"Folic Acid[:\s]+([\d.]+\s?ng/mL)",
-        "Vitamin B12": r"Vitamin B12[:\s]+([\d.]+\s?pg/mL)",
-        "TSH 3rd Generation": r"TSH 3rd Generation[:\s]+([\d.]+\s?mIU/L)",
-        "Free Testosterone": r"Free Testosterone[:\s]+([\d.]+\s?pg/mL)",
-        "Prostate-Specific Antigen": r"Prostate-Specific Antigen[:\s]+([\d.]+\s?ng/mL)",
-        "D-Dimer": r"D-Dimer[:\s]+([\d.]+\s?ng/mL)",
-        "Cortisol": r"Cortisol[:\s]+([\d.]+\s?μg/dL)",
-        "Amylase": r"Amylase[:\s]+([\d.]+\s?U/L)",
-        "Lipase": r"Lipase[:\s]+([\d.]+\s?U/L)",
-        "Serum Iron": r"Serum Iron[:\s]+([\d.]+\s?μg/dL)",
-        "Total Iron-Binding Capacity": r"Total Iron-Binding Capacity[:\s]+([\d.]+\s?μg/dL)",
-        "Transferrin Saturation": r"Transferrin Saturation[:\s]+([\d.]+\s?%)",
-        "Anti-TPO Antibodies": r"Anti-TPO Antibodies[:\s]+([\d.]+\s?IU/mL)",
-        "Rheumatoid Factor": r"Rheumatoid Factor[:\s]+([\d.]+\s?IU/mL)",
-        "ANA": r"ANA[:\s]+([^\n]+)",
-        "dsDNA": r"dsDNA[:\s]+([^\n]+)",
-        "ANCA": r"ANCA[:\s]+([^\n]+)"
+        "BP": r"BP[:\s]+([\d/]+)",  # Excludes "mmHg"
+        "Pulse Rate": r"Pulse Rate[:\s]+([\d]+)",  # Excludes "bpm"
+        "Pulse Pattern": r"Pulse Pattern\s*:\s*([^\s]+)",  # No units
+        "Resp Rate": r"Resp Rate[:\s]+([\d]+)",  # Excludes "cycles/min"
+        "Resp Pattern": r"Resp Pattern\s*:\s*([^\s]+)",  # No units
+        "Temperature": r"(?:Temperature)\s*[:\-]?\s*(\d{1,3})",  # Excludes "Celsius"
+        "SpO2": r"SpO2[:\s]+([\d]+)",  # Excludes "%"
+        "RBS": r"(?:RBS)\s*[:\-]?\s*(\d{1,3})",  # Excludes "%"
+        "Weight": r"Weight[:\s]+([\d.]+)",  # Excludes "kg" or "lbs"
+        "BMI": r"BMI[:\s]+([\d.]+)",  # No units
+        "Blood Pressure": r"Blood Pressure[:\s]+([\d/]+)",  # Excludes "mmHg"
+        "PT/INR": r"PT/INR[:\s]+([\d.]+)",  # No units
+        "B-type Natriuretic Peptide": r"B-type Natriuretic Peptide[:\s]+([\d.]+)",  # Excludes "pg/mL"
+        "Sodium": r"Sodium[:\s]+([\d.]+)",  # Excludes "mmol/L"
+        "Potassium": r"Potassium[:\s]+([\d.]+)",  # Excludes "mmol/L"
+        "Blood Glucose": r"Blood Glucose[:\s]+([\d.]+)",  # Excludes "mg/dL"
+        "HbA1c": r"HbA1c[:\s]+([\d.]+)",  # Excludes "%"
+        "Creatinine": r"Creatinine[:\s]+([\d.]+)",  # Excludes "mg/dL"
+        "eGFR": r"eGFR[:\s]+([\d.]+)",  # Excludes "mL/min/1.73m²"
+        "Calcium Levels": r"Calcium Levels[:\s]+([\d.]+)",  # Excludes "mg/dL"
+        "Vitamin D": r"Vitamin D[:\s]+([\d.]+)",  # Excludes "ng/mL"
+        "Triglycerides": r"Triglycerides[:\s]+([\d.]+)",  # Excludes "mg/dL"
+        "HDL": r"HDL[:\s]+([\d.]+)",  # Excludes "mg/dL"
+        "LDL": r"LDL[:\s]+([\d.]+)",  # Excludes "mg/dL"
+        "VLDL": r"VLDL[:\s]+([\d.]+)",  # Excludes "mg/dL"
+        "Total Cholesterol": r"Total Cholesterol[:\s]+([\d.]+)",  # Excludes "mg/dL"
+        "Albumin": r"Albumin[:\s]+([\d.]+)",  # Excludes "g/dL"
+        "Globulin": r"Globulin[:\s]+([\d.]+)",  # Excludes "g/dL"
+        "A/G Ratio": r"A/G Ratio[:\s]+([\d.]+)",  # No units
+        "Bilirubin": r"Bilirubin[:\s]+([\d.]+)",  # Excludes "mg/dL"
+        "Alkaline Phosphatase": r"Alkaline Phosphatase[:\s]+([\d.]+)",  # Excludes "U/L"
+        "AST": r"AST[:\s]+([\d.]+)",  # Excludes "U/L"
+        "ALT": r"ALT[:\s]+([\d.]+)",  # Excludes "U/L"
+        "ESR": r"ESR[:\s]+([\d.]+)",  # Excludes "mm/hr"
+        "WBC Count": r"WBC Count[:\s]+([\d.]+)",  # Excludes "cells/μL"
+        "RBC Count": r"RBC Count[:\s]+([\d.]+)",  # Excludes "million/μL"
+        "Platelet Count": r"Platelet Count[:\s]+([\d.]+)",  # Excludes "cells/μL"
+        "Hemoglobin": r"Hemoglobin[:\s]+([\d.]+)",  # Excludes "g/dL"
+        "MCV": r"MCV[:\s]+([\d.]+)",  # Excludes "fL"
+        "MCH": r"MCH[:\s]+([\d.]+)",  # Excludes "pg"
+        "MCHC": r"MCHC[:\s]+([\d.]+)",  # Excludes "g/dL"
+        "RDW": r"RDW[:\s]+([\d.]+)",  # Excludes "%"
+        "Serum Calcium": r"Serum Calcium[:\s]+([\d.]+)",  # Excludes "mg/dL"
+        "Serum Magnesium": r"Serum Magnesium[:\s]+([\d.]+)",  # Excludes "mg/dL"
+        "Serum Phosphate": r"Serum Phosphate[:\s]+([\d.]+)",  # Excludes "mg/dL"
+        "Uric Acid": r"Uric Acid[:\s]+([\d.]+)",  # Excludes "mg/dL"
+        "Folic Acid": r"Folic Acid[:\s]+([\d.]+)",  # Excludes "ng/mL"
+        "Vitamin B12": r"Vitamin B12[:\s]+([\d.]+)",  # Excludes "pg/mL"
+        "TSH 3rd Generation": r"TSH 3rd Generation[:\s]+([\d.]+)",  # Excludes "mIU/L"
+        "Free Testosterone": r"Free Testosterone[:\s]+([\d.]+)",  # Excludes "pg/mL"
+        "Prostate-Specific Antigen": r"Prostate-Specific Antigen[:\s]+([\d.]+)",  # Excludes "ng/mL"
+        "D-Dimer": r"D-Dimer[:\s]+([\d.]+)",  # Excludes "ng/mL"
+        "Cortisol": r"Cortisol[:\s]+([\d.]+)",  # Excludes "μg/dL"
+        "Amylase": r"Amylase[:\s]+([\d.]+)",  # Excludes "U/L"
+        "Lipase": r"Lipase[:\s]+([\d.]+)",  # Excludes "U/L"
+        "Serum Iron": r"Serum Iron[:\s]+([\d.]+)",  # Excludes "μg/dL"
+        "Total Iron-Binding Capacity": r"Total Iron-Binding Capacity[:\s]+([\d.]+)",  # Excludes "μg/dL"
+        "Transferrin Saturation": r"Transferrin Saturation[:\s]+([\d.]+)",  # Excludes "%"
+        "Anti-TPO Antibodies": r"Anti-TPO Antibodies[:\s]+([\d.]+)",  # Excludes "IU/mL"
+        "Rheumatoid Factor": r"Rheumatoid Factor[:\s]+([\d.]+)",  # Excludes "IU/mL"
     }
 
     vitals = {}
