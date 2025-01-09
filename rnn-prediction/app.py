@@ -4,6 +4,9 @@ import numpy as np
 
 app = Flask(__name__)
 
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({'message': 'Welcome to the Risk Prediction API!'})
 
 @app.route('/calculate-risk', methods=['POST'])
 def predict():
