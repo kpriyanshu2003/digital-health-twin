@@ -1,0 +1,38 @@
+package nxt.abhranil.dhtapp.vm
+
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import nxt.abhranil.dhtapp.data.model.CommonResponse
+import nxt.abhranil.dhtapp.data.model.CreateUser
+import nxt.abhranil.dhtapp.data.repo.DHTRepository
+import nxt.abhranil.dhtapp.data.utils.UiState
+import javax.inject.Inject
+
+@HiltViewModel
+class DHTViewModel @Inject constructor(private val repo: DHTRepository): ViewModel() {
+
+    private val _userResponse: MutableStateFlow<UiState<CommonResponse>> = MutableStateFlow(UiState.Idle)
+    val userResponse = _userResponse.asStateFlow()
+
+    fun createUser(token: String, user: CreateUser) {
+        createUserDetails(token, user)
+    }
+
+    private fun createUserDetails(token: String, user: CreateUser) {
+        _userResponse.value = UiState.Loading
+
+        viewModelScope.launch {
+            try {
+                _userResponse.value = repo.createUser(token, user)
+            }
+            catch (e: Exception) {
+                Log.d("DHTViewModel", "createUserDetails: ${e.message}")
+            }
+        }
+    }
+}

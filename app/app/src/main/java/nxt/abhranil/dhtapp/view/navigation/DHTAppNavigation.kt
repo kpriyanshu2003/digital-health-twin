@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
+import nxt.abhranil.dhtapp.view.screens.BodyMetricsScreen
 import nxt.abhranil.dhtapp.view.screens.SigninScreen
 import nxt.abhranil.dhtapp.view.screens.SignupScreen
 
@@ -17,7 +18,7 @@ fun DHTAppNavigation() {
         startDestination = if (FirebaseAuth.getInstance().currentUser == null) {
             DHTAppScreens.SignupScreen.route
         } else {
-            DHTAppScreens.PatientDashboardScreen.route
+            DHTAppScreens.BodyMetricsScreen.route
         }
     ) {
         composable(DHTAppScreens.SigninScreen.route) {
@@ -28,6 +29,9 @@ fun DHTAppNavigation() {
         }
         composable(DHTAppScreens.PatientDashboardScreen.route) {
             PatientDashboardScreen(navController)
+        }
+        composable(DHTAppScreens.BodyMetricsScreen.route) {
+            BodyMetricsScreen(navController)
         }
     }
 }

@@ -172,7 +172,7 @@ fun SignupScreen(navController: NavController,
                         Toast.makeText(context, it, Toast.LENGTH_LONG).show()
                     }) {
                         Toast.makeText(context, "Sign up Successful!", Toast.LENGTH_LONG).show()
-                        navController.navigate(DHTAppScreens.PatientDashboardScreen.route) {
+                        navController.navigate(DHTAppScreens.BodyMetricsScreen.route) {
                             popUpTo(DHTAppScreens.SignupScreen.route){
                                 inclusive = true
                                 saveState = true

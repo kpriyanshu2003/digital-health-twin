@@ -37,8 +37,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import nxt.abhranil.dhtapp.data.model.AppointmentUpload
 import nxt.abhranil.dhtapp.ui.theme.DHTAppTheme
 import nxt.abhranil.dhtapp.view.components.AppointmentUploadCard
+import nxt.abhranil.dhtapp.view.navigation.DHTAppNavigation
 import nxt.abhranil.dhtapp.view.screens.AppointmentDetailsScreen
 import nxt.abhranil.dhtapp.view.screens.AppointmentUploadScreen
+import nxt.abhranil.dhtapp.view.screens.BodyMetricsScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -47,7 +49,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DHTAppTheme {
-                AppointmentDetailsScreen()
+                DHTAppNavigation()
             }
         }
     }
