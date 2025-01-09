@@ -52,3 +52,8 @@ def test_risk_calculation():
 
 if __name__ == "__main__":
     test_risk_calculation()
+
+# Output:
+{
+    "risk_score": "<risk value>"
+}
