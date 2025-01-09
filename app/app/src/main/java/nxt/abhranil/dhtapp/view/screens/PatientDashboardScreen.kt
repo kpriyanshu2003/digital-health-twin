@@ -10,9 +10,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -137,10 +140,22 @@ fun PatientDashboardScreen(navController: NavController,
                 val scrollableState = rememberScrollState()
                 Row(
                     modifier = Modifier
-                        .horizontalScroll(scrollableState)
+                        .horizontalScroll(scrollableState),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Button(modifier = Modifier
+                        .size(80.dp), onClick = {
+                        navController.navigate(DHTAppScreens.AppointmentUploadScreen.route)
+                    }, shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF4B6CB7),
+                            contentColor = Color.White
+                        )) {
+                        Icon(imageVector = Icons.Default.Add, contentDescription = null)
+                    }
                     data.data.data.condition.forEach {
                         InfoCard(modifier = Modifier
+                            .padding(4.dp)
                             .clickable{
                                 navController.navigate(DHTAppScreens.DiseaseDetailScreen.route + "/${it.id}")
                             }, disease = it.name, medication = it.medication.toString())
@@ -309,6 +324,17 @@ fun PatientDashboardScreen(navController: NavController,
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(text = "Personalized Tips", color = Color.White)
+            }
+
+            Button(
+                onClick = {  },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6C63FF)),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(text = "Previous consulted Doctors", color = Color.White)
             }
         }
     }
