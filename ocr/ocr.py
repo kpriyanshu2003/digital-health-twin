@@ -135,11 +135,14 @@ def extract_details(text):
 
     # Extract vitals with the specified parameters
     vitals_parameters = {
-        # Existing Parameters
         "BP": r"BP[:\s]+([\d/]+\s?mmHg)",
         "Pulse Rate": r"Pulse Rate[:\s]+([\d]+\s?bpm)",
+        "Pulse Pattern": r"Pulse Pattern\s*:\s*([^\s]+)",
         "Resp Rate": r"Resp Rate[:\s]+([\d]+\s?cycles/min)",
+        "Resp Pattern": r"Resp Pattern\s*:\s*([^\s]+)",
+        "Temperature": r"(?:Temperature)\s*[:\-]?\s*(\d{1,3}\s*Celsius)",
         "SpO2": r"SpO2[:\s]+([\d]+\s?%)",
+        "RBS": r"(?:RBS)\s*[:\-]?\s*(\d{1,3}%?)",
         "Weight": r"Weight[:\s]+([\d.]+\s?(?:kg|lbs))",
         "BMI": r"BMI[:\s]+([\d.]+)",
         "Blood Pressure": r"Blood Pressure[:\s]+([\d/]+\s?mmHg)",
@@ -215,7 +218,7 @@ def extract_details(text):
         "Rheumatoid Factor": r"Rheumatoid Factor[:\s]+([\d.]+\s?IU/mL)",
         "ANA": r"ANA[:\s]+([^\n]+)",
         "dsDNA": r"dsDNA[:\s]+([^\n]+)",
-        "ANCA": r"ANCA[:\s]+([^\n]+)",
+        "ANCA": r"ANCA[:\s]+([^\n]+)"
     }
 
     vitals = {}
