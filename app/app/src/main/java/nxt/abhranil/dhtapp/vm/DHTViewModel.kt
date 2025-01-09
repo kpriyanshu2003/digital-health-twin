@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import nxt.abhranil.dhtapp.data.model.CommonResponse
 import nxt.abhranil.dhtapp.data.model.CreateUser
+import nxt.abhranil.dhtapp.data.model.DiseaseCreate
 import nxt.abhranil.dhtapp.data.repo.DHTRepository
 import nxt.abhranil.dhtapp.data.utils.UiState
 import javax.inject.Inject
@@ -32,6 +33,26 @@ class DHTViewModel @Inject constructor(private val repo: DHTRepository): ViewMod
             }
             catch (e: Exception) {
                 Log.d("DHTViewModel", "createUserDetails: ${e.message}")
+            }
+        }
+    }
+
+    private val _diseaseResponse: MutableStateFlow<UiState<CommonResponse>> = MutableStateFlow(UiState.Idle)
+    val diseaseResponse = _diseaseResponse.asStateFlow()
+
+    fun createDisease(token: String, disease: DiseaseCreate) {
+        createDiseaseDetails(token, disease)
+    }
+
+    private fun createDiseaseDetails(token: String, disease: DiseaseCreate) {
+        _diseaseResponse.value = UiState.Loading
+
+        viewModelScope.launch {
+            try {
+                _diseaseResponse.value = repo.createDisease(token, disease)
+            }
+            catch (e: Exception) {
+                Log.d("DHTViewModel", "createDiseaseDetails: ${e.message}")
             }
         }
     }

@@ -53,7 +53,7 @@ fun BodyMetricsScreen(navController: NavController,
     LaunchedEffect(data) {
         if (data is UiState.Success && !navigated) {
             navigated = true // Mark navigation as done
-            navController.navigate(DHTAppScreens.PatientDashboardScreen.route)
+            navController.navigate(DHTAppScreens.AppointmentUploadScreen.route)
         }
     }
 

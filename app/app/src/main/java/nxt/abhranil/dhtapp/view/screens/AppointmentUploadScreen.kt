@@ -1,9 +1,9 @@
 package nxt.abhranil.dhtapp.view.screens
 
-import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,10 +21,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,18 +43,79 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 import nxt.abhranil.dhtapp.R
 import nxt.abhranil.dhtapp.data.model.AppointmentUpload
+import nxt.abhranil.dhtapp.data.model.DiseaseCreate
+import nxt.abhranil.dhtapp.data.utils.UiState
 import nxt.abhranil.dhtapp.view.components.AppointmentUploadCard
+import nxt.abhranil.dhtapp.view.navigation.DHTAppScreens
+import nxt.abhranil.dhtapp.vm.DHTViewModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 @Composable
-fun AppointmentUploadScreen() {
+fun AppointmentUploadScreen(navController: NavController,
+                            viewModel: DHTViewModel = hiltViewModel()) {
+
+    var navigated by remember { mutableStateOf(false) }
+
+    val data =viewModel.diseaseResponse.collectAsState().value
+
+    LaunchedEffect(data) {
+        if (data is UiState.Success && !navigated) {
+            navigated = true // Mark navigation as done
+            navController.navigate(DHTAppScreens.PatientDashboardScreen.route)
+        }
+    }
+
+
     val verticalScrollSate = rememberScrollState()
     val appointments = remember { mutableStateListOf<AppointmentUpload>() }
+
+    var token by remember { mutableStateOf<String?>(null) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    var diseaseName by remember { mutableStateOf("") }
+
+    fun getFirebaseAuthToken() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            currentUser.getIdToken(true)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val idToken = task.result?.token
+                        Log.d("DHTApp", "Token: $idToken")
+                        val formattedString = appointments.joinToString(" ") { "${it.name} ${it.date}" }
+                        Log.d("DHTApp", "Formatted String: $formattedString")
+                        viewModel.createDisease(
+                            token = "Bearer $idToken",
+                            disease = DiseaseCreate(
+                                name = diseaseName,
+                                appointment = formattedString,
+                                file = appointments.mapNotNull { appointment ->
+                                    getMultipartFromUri(
+                                        context = navController.context,
+                                        uri = appointment.imageUri ?: return@mapNotNull null,
+                                        partName = "file"
+                                    )
+                                }
+                            ))
+                        token = task.result?.token
+                    } else {
+                        errorMessage = task.exception?.localizedMessage
+                    }
+                }
+        } else {
+            errorMessage = "User is not logged in."
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()
         .verticalScroll(verticalScrollSate)) {
@@ -58,7 +125,7 @@ fun AppointmentUploadScreen() {
             shape = RectangleShape
         ) {
             Image(
-                painter = painterResource(id = R.drawable.bg2),
+                painter = painterResource(id = R.drawable.bg2_new),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Inside
@@ -68,7 +135,7 @@ fun AppointmentUploadScreen() {
         Column(modifier = Modifier.fillMaxSize().padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally) {
 
-            Spacer(modifier = Modifier.height(460.dp))
+            Spacer(modifier = Modifier.height(300.dp))
 
             Text(
                 text = "Enter Disease Appointments",
@@ -76,6 +143,18 @@ fun AppointmentUploadScreen() {
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF5F6ECF),
                 textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = diseaseName,
+                onValueChange = { diseaseName = it },
+                label = { Text("Enter Disease Name") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -129,6 +208,7 @@ fun AppointmentUploadScreen() {
                 // Save Appointments Button
                 Button(
                     onClick = {
+                        getFirebaseAuthToken()
                         // Print the list of appointments
                         println("Appointments List:")
                         appointments.forEachIndexed { index, appointment ->
@@ -154,6 +234,14 @@ fun AppointmentUploadScreen() {
                         color = Color.White
                     )
                 }
+
+                when(data) {
+                    is UiState.Loading -> {
+                        Log.d("DHTApp", "Loading")
+                    }
+                    else -> {
+                    }
+                }
             }
         }
     }
@@ -161,34 +249,37 @@ fun AppointmentUploadScreen() {
 
 }
 
-
-fun getMultipartFromUri(context: Context, uri: Uri, partName: String): MultipartBody.Part? {
+fun getMultipartFromUri(
+    context: Context,
+    uri: Uri,
+    partName: String
+): MultipartBody.Part {
     val contentResolver = context.contentResolver
-    val inputStream = contentResolver.openInputStream(uri)
-    val file = File(context.cacheDir, getFileNameFromUri(contentResolver, uri))
 
-    // Copy the input stream to the file
-    inputStream.use { input ->
-        file.outputStream().use { output ->
-            input?.copyTo(output)
-        }
-    }
-
-    // Create RequestBody
-    val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-
-    // Create MultipartBody.Part
-    return MultipartBody.Part.createFormData(partName, file.name, requestBody)
-}
-
-fun getFileNameFromUri(contentResolver: ContentResolver, uri: Uri): String {
-    var fileName = "file"
+    // Get the original filename from the Uri
     val cursor = contentResolver.query(uri, null, null, null, null)
-    cursor?.use {
-        val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        if (nameIndex != -1 && it.moveToFirst()) {
-            fileName = it.getString(nameIndex)
+    val originalFilename = if (cursor != null && cursor.moveToFirst()) {
+        cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
+    } else {
+        "unknown_file"
+    }
+    cursor?.close()
+
+    // Open the file descriptor
+    val fileDescriptor = contentResolver.openFileDescriptor(uri, "r") ?: return MultipartBody.Part.createFormData(partName, "")
+
+    val file = File(context.cacheDir, originalFilename)
+    val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
+    val outputStream = FileOutputStream(file)
+    inputStream.use { input ->
+        outputStream.use { output ->
+            input.copyTo(output)
         }
     }
-    return fileName
+
+    // Create a RequestBody for the file
+    val requestBody = file.asRequestBody(contentResolver.getType(uri)?.toMediaTypeOrNull())
+
+    // Create the MultipartBody.Part with the original filename
+    return MultipartBody.Part.createFormData(partName, originalFilename, requestBody)
 }
