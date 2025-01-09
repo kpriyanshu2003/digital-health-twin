@@ -34,7 +34,6 @@ fun InfoCard(
             .height(110.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(Color(0x307987DF))
-//            .background(Color(0xFFE8F0FF))
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             // Left content area

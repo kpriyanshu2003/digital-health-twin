@@ -6,6 +6,7 @@ import nxt.abhranil.dhtapp.data.model.DiseaseCreate
 import nxt.abhranil.dhtapp.data.model.GetAllAppointmentsResponse
 import nxt.abhranil.dhtapp.data.model.GetAppointmentByIdResponse
 import nxt.abhranil.dhtapp.data.model.GetDiseaseByIdResponse
+import nxt.abhranil.dhtapp.data.model.GetPersonalisedTipsResponse
 import nxt.abhranil.dhtapp.data.model.GetUserDiseaseResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -57,4 +58,9 @@ interface DHTApi {
     suspend fun getAllAppointments(
         @Header("Authorization") token: String
     ) : Response<GetAllAppointmentsResponse>
+
+    @GET("aggregate/risk-predict")
+    suspend fun getPersonalisedTips(
+        @Header("Authorization") token: String
+    ) : Response<GetPersonalisedTipsResponse>
 }

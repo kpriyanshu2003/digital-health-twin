@@ -301,7 +301,7 @@ fun PatientDashboardScreen(navController: NavController,
             }
 
             Button(
-                onClick = { /* Personalized Tips Action */ },
+                onClick = { navController.navigate(DHTAppScreens.GetPersonalisedTipsScreen.route) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),

@@ -13,6 +13,7 @@ import nxt.abhranil.dhtapp.data.model.DiseaseCreate
 import nxt.abhranil.dhtapp.data.model.GetAllAppointmentsResponse
 import nxt.abhranil.dhtapp.data.model.GetAppointmentByIdResponse
 import nxt.abhranil.dhtapp.data.model.GetDiseaseByIdResponse
+import nxt.abhranil.dhtapp.data.model.GetPersonalisedTipsResponse
 import nxt.abhranil.dhtapp.data.model.GetUserDiseaseResponse
 import nxt.abhranil.dhtapp.data.repo.DHTRepository
 import nxt.abhranil.dhtapp.data.utils.UiState
@@ -137,6 +138,26 @@ class DHTViewModel @Inject constructor(private val repo: DHTRepository): ViewMod
                 _getAllAppointmentsResponse.value = repo.getAllAppointments(token)
             } catch (e: Exception) {
                 Log.d("DHTViewModel", "getAllAppointments: ${e.message}")
+            }
+        }
+    }
+
+    private val _getPersonaliedTipsResponse: MutableStateFlow<UiState<GetPersonalisedTipsResponse>> =
+        MutableStateFlow(UiState.Idle)
+    val getPersonalisedTipsResponse = _getPersonaliedTipsResponse.asStateFlow()
+
+    fun getPersonalisedTips(token: String) {
+        getAllTips(token)
+    }
+
+    private fun getAllTips(token: String) {
+        _getPersonaliedTipsResponse.value = UiState.Loading
+
+        viewModelScope.launch {
+            try {
+                _getPersonaliedTipsResponse.value = repo.getPersonalisedTips(token)
+            } catch (e: Exception) {
+                Log.d("DHTViewModel", "getAllTips: ${e.message}")
             }
         }
     }
