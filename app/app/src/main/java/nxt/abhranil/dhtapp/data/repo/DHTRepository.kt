@@ -1,12 +1,9 @@
 package nxt.abhranil.dhtapp.data.repo
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalContext
-import com.google.firebase.auth.FirebaseAuth
 import nxt.abhranil.dhtapp.data.model.CommonResponse
 import nxt.abhranil.dhtapp.data.model.CreateUser
 import nxt.abhranil.dhtapp.data.model.DiseaseCreate
+import nxt.abhranil.dhtapp.data.model.GetUserDiseaseResponse
 import nxt.abhranil.dhtapp.data.remote.DHTApi
 import nxt.abhranil.dhtapp.data.utils.UiState
 import javax.inject.Inject
@@ -30,6 +27,16 @@ class DHTRepository @Inject constructor(private val api: DHTApi) {
             diseaseName = disease.name,
             files = disease.file,
             appointment = disease.appointment
+        )
+        if (response.isSuccessful)
+            return UiState.Success(response.body()!!)
+        else
+            return UiState.Error(response.message())
+    }
+
+    suspend fun getUserDiseases(token: String) : UiState<GetUserDiseaseResponse> {
+        val response = api.getUserDiseases(
+            token = token
         )
         if (response.isSuccessful)
             return UiState.Success(response.body()!!)

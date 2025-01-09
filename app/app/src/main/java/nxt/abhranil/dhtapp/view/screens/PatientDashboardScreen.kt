@@ -1,3 +1,4 @@
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -11,8 +12,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,14 +30,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
+import nxt.abhranil.dhtapp.R
+import nxt.abhranil.dhtapp.data.model.Result
+import nxt.abhranil.dhtapp.data.utils.UiState
 import nxt.abhranil.dhtapp.view.components.InfoCard
 import nxt.abhranil.dhtapp.view.components.MetricCard
-import nxt.abhranil.dhtapp.R
+import nxt.abhranil.dhtapp.vm.DHTViewModel
 import java.util.Calendar
 
 @Composable
-fun PatientDashboardScreen(navController: NavController) {
+fun PatientDashboardScreen(navController: NavController,
+                           viewModel: DHTViewModel = hiltViewModel()) {
+
+    var token by remember { mutableStateOf<String?>(null) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
     Card(
         modifier = Modifier
             .fillMaxSize(),
@@ -51,213 +67,258 @@ fun PatientDashboardScreen(navController: NavController) {
             .padding(16.dp)
             .verticalScroll(verticalScrollSate)
     ) {
-        // Greeting and Patient Info
-        Column(
-            modifier = Modifier.padding(bottom = 16.dp)
-        ) {
-            val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-            val greeting = when (currentHour) {
-                in 0..11 -> "Good morning"
-                in 12..17 -> "Good afternoon"
-                else -> "Good evening"
+        val data = viewModel.getUserDiseaseResponse.collectAsState().value
+        fun getFirebaseAuthToken() {
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            if (currentUser != null) {
+                currentUser.getIdToken(true)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val idToken = task.result?.token
+                            Log.d("DHTApp", "Token: $idToken")
+                            token = task.result?.token
+                            viewModel.getUserDiseases(token = "Bearer $idToken")
+                        } else {
+                            errorMessage = task.exception?.localizedMessage
+                        }
+                    }
+            } else {
+                errorMessage = "User is not logged in."
             }
-            Text(
-                modifier = Modifier.padding(start = 8.dp, top = 40.dp),
-                text = greeting,
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-            Text(
-                modifier = Modifier.padding(start = 8.dp),
-                text = "72 years, MALE",
-                fontSize = 16.sp,
-                color = Color(0xFF6C63FF)
-            )
         }
+        when (data) {
+            is UiState.Idle -> {
+                getFirebaseAuthToken()
+            }
 
-
-        val scrollableState = rememberScrollState()
-        Row(
-            modifier = Modifier
-                .horizontalScroll(scrollableState)
-        ) {
-            InfoCard()
-            Spacer(
-                modifier = Modifier.width(8.dp)
-            )
-            InfoCard()
-        }
-
-        // Health Metrics Section
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp)
-        ) {
-            // Metrics Grid
-            HealthMetricsGrid()
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            ) {
-                RiskIndicator()
-                Spacer(modifier = Modifier.width(8.dp))
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    AlertCard(message = "! Edema spike - Reduce sodium intake, consider a diuretic dose adjustment.")
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Buttons
-                    ActionButtons()
+            is UiState.Loading -> {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "Loading....",
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 20.sp,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LinearProgressIndicator(
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
 
-        }
+            is UiState.Success -> {
+                Column(
+                    modifier = Modifier.padding(bottom = 16.dp)
+                ) {
+                    val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+                    val greeting = when (currentHour) {
+                        in 0..11 -> "Good morning"
+                        in 12..17 -> "Good afternoon"
+                        else -> "Good evening"
+                    }
+                    Text(
+                        modifier = Modifier.padding(start = 8.dp, top = 40.dp),
+                        text = greeting,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                    Text(
+                        modifier = Modifier.padding(start = 8.dp),
+                        text = "${data.data.data.user.age} years old, ${data.data.data.user.gender}",
+                        fontSize = 16.sp,
+                        color = Color(0xFF6C63FF)
+                    )
+                }
 
+
+                val scrollableState = rememberScrollState()
+                Row(
+                    modifier = Modifier
+                        .horizontalScroll(scrollableState)
+                ) {
+                    data.data.data.condition.forEach {
+                        InfoCard(disease = it.name, medication = it.medication.toString())
+                    }
+                }
+
+                // Health Metrics Section
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp)
+                ) {
+                    // Metrics Grid
+                    HealthMetricsGrid(
+                        data.data.data.result
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                    ) {
+                        RiskIndicator()
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            AlertCard(message = "! Edema spike - Reduce sodium intake, consider a diuretic dose adjustment.")
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            // Buttons
+                            ActionButtons()
+                        }
+                    }
+
+                }
+
+
+            }
+
+            is UiState.Error -> TODO()
+        }
+        }
+        // Greeting and Patient Info
 
     }
-}
 
-@Composable
-fun HealthMetricsGrid() {
-    data class Metric(
-        val value: String,
-        val unit: String,
-        val label: String
-    )
-    val metricsList = listOf<Metric>(
-        Metric("140/90", "mmHg", "Blood Pressure"),
-        Metric("85", "bpm", "Heart Rate"),
-        Metric("94", "%", "Oxygen Generation"),
-        Metric("80.5", "kg", "Weight"),
-        Metric("24.75", "", "BMI"),
-        Metric("6.0", "mg/dL", "Uric Acid"),
-        Metric("138", "mmol/L", "Sodium"),
-        Metric("4.5", "mmol/L", "Potassium"),
-        Metric("200", "mg/dL", "Cholesterol")
-    )
+    @Composable
+    fun HealthMetricsGrid(listOfMetrics: List<Result>) {
+        data class Metric(
+            val value: String,
+            val unit: String,
+            val label: String
+        )
 
-    Row(
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-    ) {
-        Box(
+        val metricsList = listOf<Metric>(
+            Metric(listOfMetrics[1].value, "mmHg", "Blood Pressure"),
+            Metric("85", "bpm", "Heart Rate"),
+            Metric("94", "%", "Oxygen Generation"),
+            Metric("80.5", "kg", "Weight"),
+            Metric("24.75", "", "BMI"),
+            Metric("6.0", "mg/dL", "Uric Acid"),
+            Metric("138", "mmol/L", "Sodium"),
+            Metric("4.5", "mmol/L", "Potassium"),
+            Metric("200", "mg/dL", "Cholesterol")
+        )
+
+        Row(
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .height(220.dp)
-                .width(130.dp) // Set the desired size for the Box
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.human_body_ic),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(), // Ensure the image fills the Box completely
-                contentScale = ContentScale.FillBounds // Scale the image as needed
-            )
-        }
+            Box(
+                modifier = Modifier
+                    .height(220.dp)
+                    .width(130.dp) // Set the desired size for the Box
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.human_body_ic),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(), // Ensure the image fills the Box completely
+                    contentScale = ContentScale.FillBounds // Scale the image as needed
+                )
+            }
 
-        Column(
-            verticalArrangement = Arrangement.SpaceEvenly
-        ) {
-            for (i in metricsList.chunked(3)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    i.forEach { metric ->
-                        MetricCard(
-                            metricName = metric.label,
-                            quantity = metric.value,
-                            unit = metric.unit
-                        )
+            Column(
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                for (i in listOfMetrics.chunked(3)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        i.forEach { metric ->
+                            MetricCard(
+                                metricName = metric.name,
+                                quantity = metric.value,
+                                unit = ""
+                            )
+                        }
                     }
                 }
             }
         }
+
+
     }
 
 
-}
-
-
-@Composable
-fun RiskIndicator() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .background(Color(0xFFF5F6FA), shape = CircleShape)
-                .border(width = 4.dp, color = Color(0xFF1E2F98), shape = CircleShape),
-            contentAlignment = Alignment.Center
+    @Composable
+    fun RiskIndicator() {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Box(
+                modifier = Modifier
+                    .size(100.dp)
+                    .background(Color(0xFFF5F6FA), shape = CircleShape)
+                    .border(width = 4.dp, color = Color(0xFF1E2F98), shape = CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "5.26 %",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
             Text(
-                text = "5.26 %",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
+                modifier = Modifier.width(150.dp),
+                text = "Risk of Deterioration in Next 30 Days",
+                fontSize = 12.sp,
+                color = Color.Gray,
+                textAlign = TextAlign.Center
             )
         }
-        Text(
-            modifier = Modifier.width(150.dp),
-            text = "Risk of Deterioration in Next 30 Days",
-            fontSize = 12.sp,
-            color = Color.Gray,
-            textAlign = TextAlign.Center
-        )
     }
-}
 
-@Composable
-fun AlertCard(message: String) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color(0xFFFFF5F5), RoundedCornerShape(8.dp))
-            .padding(8.dp)
-    ) {
-        Text(
-            text = message,
-            fontSize = 12.sp,
-            color = Color.Red
-        )
-    }
-}
-
-@Composable
-fun ActionButtons() {
-    Column {
-        Button(
-            onClick = { /* View Medical History Action */ },
+    @Composable
+    fun AlertCard(message: String) {
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6C63FF)),
-            shape = RoundedCornerShape(8.dp)
+                .background(Color(0xFFFFF5F5), RoundedCornerShape(8.dp))
+                .padding(8.dp)
         ) {
-            Text(text = "View Medical History", color = Color.White)
-        }
-
-        Button(
-            onClick = { /* Personalized Tips Action */ },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6C63FF)),
-            shape = RoundedCornerShape(8.dp)
-        ) {
-            Text(text = "Personalized Tips", color = Color.White)
+            Text(
+                text = message,
+                fontSize = 12.sp,
+                color = Color.Red
+            )
         }
     }
-}
+
+    @Composable
+    fun ActionButtons() {
+        Column {
+            Button(
+                onClick = { /* View Medical History Action */ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6C63FF)),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(text = "View Medical History", color = Color.White)
+            }
+
+            Button(
+                onClick = { /* Personalized Tips Action */ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6C63FF)),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(text = "Personalized Tips", color = Color.White)
+            }
+        }
+    }

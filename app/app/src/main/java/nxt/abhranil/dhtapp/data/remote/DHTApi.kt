@@ -3,6 +3,7 @@ package nxt.abhranil.dhtapp.data.remote
 import nxt.abhranil.dhtapp.data.model.CommonResponse
 import nxt.abhranil.dhtapp.data.model.CreateUser
 import nxt.abhranil.dhtapp.data.model.DiseaseCreate
+import nxt.abhranil.dhtapp.data.model.GetUserDiseaseResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -30,4 +31,9 @@ interface DHTApi {
         @Part files: List<MultipartBody.Part>,
         @Part("appointment") appointment: String
     ) : Response<CommonResponse>
+
+    @GET("conditions")
+    suspend fun getUserDiseases(
+        @Header("Authorization") token: String
+    ) : Response<GetUserDiseaseResponse>
 }

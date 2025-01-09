@@ -17,12 +17,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun InfoCard() {
+fun InfoCard(
+    disease: String,
+    medication: String
+) {
     Box(
         modifier = Modifier
             .width(330.dp)
@@ -49,7 +53,7 @@ fun InfoCard() {
                     lineHeight = 4.sp
                 )
                 Text(
-                    text = "Congestive Heart Failure (NYHA Class III)",
+                    text = disease,
                     color = Color.Black,
                     fontSize = 15.sp,
                     lineHeight = 4.sp
@@ -65,10 +69,12 @@ fun InfoCard() {
 
                 )
                 Text(
-                    text = "Furosemide, Enalapril, Metoprolol",
+                    text = medication,
                     color = Color.Black,
                     fontSize = 15.sp,
-                    lineHeight = 4.sp
+                    lineHeight = 4.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
             }
@@ -82,10 +88,4 @@ fun InfoCard() {
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewInfoCard() {
-    InfoCard()
 }
