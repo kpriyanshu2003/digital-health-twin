@@ -5,7 +5,8 @@ import re
 import json
 
 TESSERACT_PATH = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
-IMAGE_PATH = 'res/image3.png'
+IMAGE_PATH = "res/image3.png"
+
 
 def get_ocr(path):
     pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
@@ -17,6 +18,7 @@ def get_ocr(path):
 
     return ocr_text
 
+
 # Function to extract details
 def extract_details(text):
     # Extract doctor's name
@@ -25,34 +27,105 @@ def extract_details(text):
 
     # Extract doctor's designation
     possible_designations = [
-        "MBBS", "MD", "M.D.", "MS", "DM", "MCh", "DNB", "BDS", "MDS", "PhD",
-        "Consultant", "Surgeon", "General Physician", "Dermatologist",
-        "Neurologist", "Cardiologist", "Oncologist", "Psychiatrist", "Endocrinologist",
-        "Pediatrician", "Orthopedic Surgeon", "Urologist", "Gastroenterologist",
-        "Nephrologist", "Rheumatologist", "Hematologist", "Pulmonologist",
-        "Immunologist", "ENT Specialist", "Ophthalmologist", "Radiologist",
-        "Anesthesiologist", "Pathologist", "Physiotherapist", "Chiropractor",
-        "Occupational Therapist", "Speech Therapist", "Dietitian", "Nutritionist",
-        "Psychologist", "Clinical Psychologist", "Gynecologist", "Obstetrician",
-        "Hepatologist", "Sports Medicine Specialist", "Forensic Pathologist",
-        "Infectious Disease Specialist", "Allergist", "Critical Care Specialist",
-        "Emergency Medicine Specialist", "Neonatologist", "Family Medicine Physician",
-        "Palliative Care Specialist", "Reproductive Endocrinologist",
-        "Pain Management Specialist", "Hospitalist", "Vascular Surgeon",
-        "Hand Surgeon", "Plastic Surgeon", "Cosmetic Surgeon", "Maxillofacial Surgeon",
-        "Trauma Surgeon", "Bariatric Surgeon", "Podiatrist", "Epidemiologist",
-        "Medical Oncologist", "Surgical Oncologist", "Radiation Oncologist",
-        "Preventive Medicine Specialist", "Toxicologist", "Osteopath",
-        "Geneticist", "Virologist", "Biotechnologist", "Microbiologist",
-        "Pharmacologist", "Veterinarian", "Clinical Researcher",
-        "Health Administrator", "Public Health Specialist", "Biostatistician",
-        "Medical Informatician", "Biomedical Engineer", "Nurse Practitioner",
-        "Midwife", "Clinical Nurse Specialist", "Nurse Anesthetist",
-        "Cardiac Electrophysiologist", "Neuropsychiatrist", "Pediatric Surgeon",
-        "Neurointerventional Radiologist", "Interventional Cardiologist",
-        "Emergency Physician", "Critical Care Physician", "Ocular Oncologist"
+        "MBBS",
+        "MD",
+        "M.D.",
+        "MS",
+        "DM",
+        "MCh",
+        "DNB",
+        "BDS",
+        "MDS",
+        "PhD",
+        "Consultant",
+        "Surgeon",
+        "General Physician",
+        "Dermatologist",
+        "Neurologist",
+        "Cardiologist",
+        "Oncologist",
+        "Psychiatrist",
+        "Endocrinologist",
+        "Pediatrician",
+        "Orthopedic Surgeon",
+        "Urologist",
+        "Gastroenterologist",
+        "Nephrologist",
+        "Rheumatologist",
+        "Hematologist",
+        "Pulmonologist",
+        "Immunologist",
+        "ENT Specialist",
+        "Ophthalmologist",
+        "Radiologist",
+        "Anesthesiologist",
+        "Pathologist",
+        "Physiotherapist",
+        "Chiropractor",
+        "Occupational Therapist",
+        "Speech Therapist",
+        "Dietitian",
+        "Nutritionist",
+        "Psychologist",
+        "Clinical Psychologist",
+        "Gynecologist",
+        "Obstetrician",
+        "Hepatologist",
+        "Sports Medicine Specialist",
+        "Forensic Pathologist",
+        "Infectious Disease Specialist",
+        "Allergist",
+        "Critical Care Specialist",
+        "Emergency Medicine Specialist",
+        "Neonatologist",
+        "Family Medicine Physician",
+        "Palliative Care Specialist",
+        "Reproductive Endocrinologist",
+        "Pain Management Specialist",
+        "Hospitalist",
+        "Vascular Surgeon",
+        "Hand Surgeon",
+        "Plastic Surgeon",
+        "Cosmetic Surgeon",
+        "Maxillofacial Surgeon",
+        "Trauma Surgeon",
+        "Bariatric Surgeon",
+        "Podiatrist",
+        "Epidemiologist",
+        "Medical Oncologist",
+        "Surgical Oncologist",
+        "Radiation Oncologist",
+        "Preventive Medicine Specialist",
+        "Toxicologist",
+        "Osteopath",
+        "Geneticist",
+        "Virologist",
+        "Biotechnologist",
+        "Microbiologist",
+        "Pharmacologist",
+        "Veterinarian",
+        "Clinical Researcher",
+        "Health Administrator",
+        "Public Health Specialist",
+        "Biostatistician",
+        "Medical Informatician",
+        "Biomedical Engineer",
+        "Nurse Practitioner",
+        "Midwife",
+        "Clinical Nurse Specialist",
+        "Nurse Anesthetist",
+        "Cardiac Electrophysiologist",
+        "Neuropsychiatrist",
+        "Pediatric Surgeon",
+        "Neurointerventional Radiologist",
+        "Interventional Cardiologist",
+        "Emergency Physician",
+        "Critical Care Physician",
+        "Ocular Oncologist",
     ]
-    designation_pattern = r"\b(?:{})\b".format("|".join(re.escape(desig) for desig in possible_designations))
+    designation_pattern = r"\b(?:{})\b".format(
+        "|".join(re.escape(desig) for desig in possible_designations)
+    )
     designations = re.findall(designation_pattern, text)
     designations = list(set(designations))
 
@@ -142,7 +215,7 @@ def extract_details(text):
         "Rheumatoid Factor": r"Rheumatoid Factor[:\s]+([\d.]+\s?IU/mL)",
         "ANA": r"ANA[:\s]+([^\n]+)",
         "dsDNA": r"dsDNA[:\s]+([^\n]+)",
-        "ANCA": r"ANCA[:\s]+([^\n]+)"
+        "ANCA": r"ANCA[:\s]+([^\n]+)",
     }
 
     vitals = {}
@@ -160,15 +233,16 @@ def extract_details(text):
 
     # Return the extracted data as a dictionary
     return {
-        "Doctor's Name": doctor_name,
-        "Designation": designations,
-        "Doctor's Phone": doctor_phone,
-        "Vitals": vitals,
-        "Complaints": complaints_list,
-        "Medications": medication_names
+        "doctorName": doctor_name,
+        "designation": designations,
+        "doctorPhone": doctor_phone,
+        "vitals": vitals,
+        "complaints": complaints_list,
+        "medications": medication_names,
     }
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     ocr_text = get_ocr(IMAGE_PATH)
     extracted_data = extract_details(ocr_text)
 
