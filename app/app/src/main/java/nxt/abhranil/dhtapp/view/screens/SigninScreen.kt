@@ -8,10 +8,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +34,7 @@ import nxt.abhranil.dhtapp.R
 import nxt.abhranil.dhtapp.view.navigation.DHTAppScreens
 import nxt.abhranil.dhtapp.vm.LoginViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SigninScreen(navController: NavController,
                  viewModel: LoginViewModel = viewModel()) {
@@ -74,6 +77,16 @@ fun SigninScreen(navController: NavController,
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Blue, // Color when focused
+                    unfocusedBorderColor = Color.Gray, // Color when not focused
+                    disabledBorderColor = Color.LightGray, // Color when disabled
+                    errorBorderColor = Color.Red,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Gray// Color when there's an error
+                ),
                 value = email,
                 onValueChange = { email = it },
                 label = { Text("Email") },
@@ -85,6 +98,16 @@ fun SigninScreen(navController: NavController,
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Blue, // Color when focused
+                    unfocusedBorderColor = Color.Gray, // Color when not focused
+                    disabledBorderColor = Color.LightGray, // Color when disabled
+                    errorBorderColor = Color.Red,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Gray// Color when there's an error
+                ),
                 value = password,
                 onValueChange = { password = it },
                 label = { Text("Password") },
@@ -96,31 +119,6 @@ fun SigninScreen(navController: NavController,
             Spacer(modifier = Modifier.height(8.dp))
 
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Google Signup Button
-            Button(
-                onClick = { /* Handle Google Signup */ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF2F2F2)),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Icon(
-                    modifier = Modifier.size(24.dp),
-                    painter = painterResource(id = R.drawable.google_ic), // Replace with actual resource
-                    contentDescription = "Google Icon",
-                    tint = Color.Unspecified
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Signup with Google",
-                    color = Color.Black
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             Spacer(modifier = Modifier.height(16.dp))
 

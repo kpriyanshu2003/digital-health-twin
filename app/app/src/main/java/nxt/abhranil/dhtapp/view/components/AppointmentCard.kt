@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun AppointmentCard(
@@ -28,16 +29,17 @@ fun AppointmentCard(
     doctor: String
 ) {
     OutlinedCard(modifier = modifier
-        .fillMaxWidth(),
+        .fillMaxWidth()
+        .padding(16.dp),
         colors = CardDefaults.cardColors(Color(0xFFF1F1F1)),
         border = BorderStroke(1.dp, Color.Transparent),
         shape = RoundedCornerShape(24.dp)) {
         Column(modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.Start) {
             Text(text = name,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
-                style = MaterialTheme.typography.headlineSmall)
+                fontSize = 20.sp)
 
             HorizontalDivider(color = Color(0xFFB0B0B0),
                 thickness = 1.dp,

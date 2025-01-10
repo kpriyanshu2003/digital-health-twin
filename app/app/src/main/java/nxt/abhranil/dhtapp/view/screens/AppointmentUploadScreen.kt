@@ -21,8 +21,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -60,6 +62,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppointmentUploadScreen(navController: NavController,
                             viewModel: DHTViewModel = hiltViewModel()) {
@@ -148,6 +151,16 @@ fun AppointmentUploadScreen(navController: NavController,
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Blue, // Color when focused
+                    unfocusedBorderColor = Color.Gray, // Color when not focused
+                    disabledBorderColor = Color.LightGray, // Color when disabled
+                    errorBorderColor = Color.Red,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Gray// Color when there's an error
+                ),
                 value = diseaseName,
                 onValueChange = { diseaseName = it },
                 label = { Text("Enter Disease Name") },

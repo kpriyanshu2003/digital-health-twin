@@ -309,7 +309,7 @@ fun PatientDashboardScreen(navController: NavController,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6C63FF)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4B6CB7)),
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(text = "View Medical History", color = Color.White)
@@ -320,7 +320,7 @@ fun PatientDashboardScreen(navController: NavController,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6C63FF)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4B6CB7)),
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(text = "Personalized Tips", color = Color.White)
@@ -331,7 +331,7 @@ fun PatientDashboardScreen(navController: NavController,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6C63FF)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4B6CB7)),
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(text = "Previous consulted Doctors", color = Color.White)

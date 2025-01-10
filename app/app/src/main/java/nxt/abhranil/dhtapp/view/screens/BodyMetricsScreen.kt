@@ -14,8 +14,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +43,7 @@ import nxt.abhranil.dhtapp.data.utils.UiState
 import nxt.abhranil.dhtapp.view.navigation.DHTAppScreens
 import nxt.abhranil.dhtapp.vm.DHTViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BodyMetricsScreen(navController: NavController,
                       viewModel: DHTViewModel = hiltViewModel()
@@ -138,6 +141,16 @@ fun BodyMetricsScreen(navController: NavController,
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Blue, // Color when focused
+                    unfocusedBorderColor = Color.Gray, // Color when not focused
+                    disabledBorderColor = Color.LightGray, // Color when disabled
+                    errorBorderColor = Color.Red,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Gray// Color when there's an error
+                ),
                 value = height,
                 onValueChange = { height = it },
                 label = { Text("Height (cm)") },
@@ -150,6 +163,16 @@ fun BodyMetricsScreen(navController: NavController,
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Blue, // Color when focused
+                    unfocusedBorderColor = Color.Gray, // Color when not focused
+                    disabledBorderColor = Color.LightGray, // Color when disabled
+                    errorBorderColor = Color.Red,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Gray// Color when there's an error
+                ),
                 value = weight,
                 onValueChange = { weight = it },
                 label = { Text("Weight (kg)") },
@@ -162,6 +185,16 @@ fun BodyMetricsScreen(navController: NavController,
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Blue, // Color when focused
+                    unfocusedBorderColor = Color.Gray, // Color when not focused
+                    disabledBorderColor = Color.LightGray, // Color when disabled
+                    errorBorderColor = Color.Red,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Gray// Color when there's an error
+                ),
                 value = age.toString(),
                 onValueChange = { age = it },
                 label = { Text("Age") },
@@ -174,6 +207,16 @@ fun BodyMetricsScreen(navController: NavController,
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Blue, // Color when focused
+                    unfocusedBorderColor = Color.Gray, // Color when not focused
+                    disabledBorderColor = Color.LightGray, // Color when disabled
+                    errorBorderColor = Color.Red,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Gray// Color when there's an error
+                ),
                 value = gender,
                 onValueChange = { gender = it },
                 label = { Text("Gender") },
@@ -186,6 +229,16 @@ fun BodyMetricsScreen(navController: NavController,
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Blue, // Color when focused
+                    unfocusedBorderColor = Color.Gray, // Color when not focused
+                    disabledBorderColor = Color.LightGray, // Color when disabled
+                    errorBorderColor = Color.Red,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Gray// Color when there's an error
+                ),
                 value = bmi,
                 onValueChange = {}, // No-op: read-only field
                 label = { Text("BMI") },

@@ -3,6 +3,7 @@ package nxt.abhranil.dhtapp.data.repo
 import nxt.abhranil.dhtapp.data.model.CommonResponse
 import nxt.abhranil.dhtapp.data.model.CreateUser
 import nxt.abhranil.dhtapp.data.model.DiseaseCreate
+import nxt.abhranil.dhtapp.data.model.DoctorUpdateBody
 import nxt.abhranil.dhtapp.data.model.GetAllAppointmentsResponse
 import nxt.abhranil.dhtapp.data.model.GetAppointmentByIdResponse
 import nxt.abhranil.dhtapp.data.model.GetDiseaseByIdResponse
@@ -94,6 +95,18 @@ class DHTRepository @Inject constructor(private val api: DHTApi) {
     suspend fun getPastDoctors(token: String) : UiState<GetPastDoctorsResponse> {
         val response = api.getPastDoctors(
             token = token
+        )
+        if (response.isSuccessful)
+            return UiState.Success(response.body()!!)
+        else
+            return UiState.Error(response.message())
+    }
+
+    suspend fun updateDoctor(token: String, doctorID: String, doctor: DoctorUpdateBody) : UiState<CommonResponse> {
+        val response = api.updateDoctor(
+            token = token,
+            doctorID = doctorID,
+            doctor = doctor
         )
         if (response.isSuccessful)
             return UiState.Success(response.body()!!)
