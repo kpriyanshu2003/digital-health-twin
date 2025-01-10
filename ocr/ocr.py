@@ -147,12 +147,12 @@ def extract_details(text):
 
     # Return the extracted data as a dictionary
     return {
-        "Doctor's Name": doctor_name,
-        "Designation": designations,
-        "Doctor's Phone": doctor_phone,
-        "Vitals": vitals,
-        "Complaints": complaints_list,
-        "Medications": medication_names
+        "doctorName": doctor_name,
+        "designation": designations,
+        "doctorPhone": doctor_phone,
+        "vitals": vitals,
+        "complaints": complaints_list,
+        "medications": medication_names
     }
 
 if __name__ == '__main__':
