@@ -127,7 +127,7 @@ fun AppointmentDetailsScreen(navController: NavController,
                 }
                 if(!data.data.appointment.LabResult.isNullOrEmpty())
                 MetricTable(labResults = data.data.appointment.LabResult)
-                PrescriptionDownloadComponent()
+                PrescriptionDownloadComponent(data.data.appointment.imageUrl.toString())
             }
         }
         else -> {

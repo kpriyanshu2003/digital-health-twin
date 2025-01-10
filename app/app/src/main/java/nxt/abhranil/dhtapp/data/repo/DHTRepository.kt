@@ -1,5 +1,6 @@
 package nxt.abhranil.dhtapp.data.repo
 
+import android.util.Log
 import nxt.abhranil.dhtapp.data.model.CommonResponse
 import nxt.abhranil.dhtapp.data.model.CreateUser
 import nxt.abhranil.dhtapp.data.model.DiseaseCreate
@@ -86,6 +87,7 @@ class DHTRepository @Inject constructor(private val api: DHTApi) {
         val response = api.getPersonalisedTips(
             token = token
         )
+        Log.d("DHTRepository", "getPersonalisedTips: $response")
         if (response.isSuccessful)
             return UiState.Success(response.body()!!)
         else

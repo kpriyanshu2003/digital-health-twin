@@ -1,3 +1,5 @@
+import android.R.attr.fontWeight
+import android.R.attr.text
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,6 +17,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
@@ -28,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.key.Key.Companion.D
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import nxt.abhranil.dhtapp.R
@@ -244,7 +249,7 @@ fun PatientDashboardScreen(navController: NavController,
                             MetricCard(
                                 metricName = metric.name,
                                 quantity = metric.value,
-                                unit = ""
+                                unit = metric.unit.toString()
                             )
                         }
                     }
@@ -256,34 +261,94 @@ fun PatientDashboardScreen(navController: NavController,
     }
 
 
-    @Composable
-    fun RiskIndicator() {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+@Composable
+fun RiskIndicator() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .background(Color(0xFFF5F6FA), shape = CircleShape)
+                .border(width = 4.dp, color = Color(0xFF1E2F98), shape = CircleShape),
+            contentAlignment = Alignment.Center
         ) {
-            Box(
-                modifier = Modifier
-                    .size(100.dp)
-                    .background(Color(0xFFF5F6FA), shape = CircleShape)
-                    .border(width = 4.dp, color = Color(0xFF1E2F98), shape = CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "5.26 %",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-            }
             Text(
-                modifier = Modifier.width(150.dp),
-                text = "Risk of Deterioration in Next 30 Days",
-                fontSize = 12.sp,
-                color = Color.Gray,
-                textAlign = TextAlign.Center
+                text = "5.26 %",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
         }
+        Text(
+            modifier = Modifier.width(150.dp),
+            text = "Risk of Deterioration in Next 30 Days",
+            fontSize = 12.sp,
+            color = Color.Gray,
+            textAlign = TextAlign.Center
+        )
     }
+}
+
+//    @Composable
+//    fun RiskIndicator(
+//        viewModel: DHTViewModel = hiltViewModel()
+//    ) {
+//        var errorMessage by remember { mutableStateOf<String?>(null) }
+//        val data = viewModel.getPersonalisedTipsResponse.collectAsState().value
+//        Column(
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ) {
+//            Box(
+//                modifier = Modifier
+//                    .size(100.dp)
+//                    .background(Color(0xFFF5F6FA), shape = CircleShape)
+//                    .border(width = 4.dp, color = Color(0xFF1E2F98), shape = CircleShape),
+//                contentAlignment = Alignment.Center
+//            ) {
+//                when (data) {
+//                    is UiState.Idle -> {
+//                        val currentUser = FirebaseAuth.getInstance().currentUser
+//                        if (currentUser != null) {
+//                            currentUser.getIdToken(true)
+//                                .addOnCompleteListener { task ->
+//                                    if (task.isSuccessful) {
+//                                        val idToken = task.result?.token
+//                                        Log.d("DHTApp", "Token: $idToken")
+//                                        viewModel.getPersonalisedTips(token = "Bearer $idToken")
+//                                    } else {
+//                                        errorMessage = task.exception?.localizedMessage
+//                                    }
+//                                }
+//                        } else {
+//                            errorMessage = "User is not logged in."
+//                        }
+//                    }
+//                    is UiState.Loading -> {
+//                        CircularProgressIndicator()
+//                    }
+//
+//                    is UiState.Success -> {
+//                        Text(
+//                            text = data.data.data.riskFactor.toString(),
+//                            fontSize = 18.sp,
+//                            fontWeight = FontWeight.Bold,
+//                            color = Color.Black
+//                        )
+//                    }
+//                    else -> {}
+//                }
+//
+//            }
+//            Text(
+//                modifier = Modifier.width(150.dp),
+//                text = "Risk of Deterioration in Next 30 Days",
+//                fontSize = 12.sp,
+//                color = Color.Gray,
+//                textAlign = TextAlign.Center
+//            )
+//        }
+//    }
 
     @Composable
     fun AlertCard(message: String) {

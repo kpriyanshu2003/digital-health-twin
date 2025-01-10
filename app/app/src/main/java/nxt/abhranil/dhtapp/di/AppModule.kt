@@ -17,7 +17,7 @@ object AppModule {
     @Provides
     fun provideApi(): DHTApi {
         return Retrofit.Builder()
-            .baseUrl("https://right-keen-antelope.ngrok-free.app/")
+            .baseUrl("https://icdcit.iotkiit.in/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(DHTApi::class.java)

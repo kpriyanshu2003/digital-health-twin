@@ -3,7 +3,6 @@ package nxt.abhranil.dhtapp.view.screens
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
@@ -34,15 +32,14 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import nxt.abhranil.dhtapp.R
+import nxt.abhranil.dhtapp.data.model.Recommendations
 import nxt.abhranil.dhtapp.data.utils.UiState
-import nxt.abhranil.dhtapp.view.components.AppointmentCard
 import nxt.abhranil.dhtapp.vm.DHTViewModel
 
 @Composable
@@ -105,10 +102,16 @@ fun GetPersonalisedTipsScreen(navController: NavController,
         }
 
         is UiState.Success -> {
+
+            val listOfDummyReco = Recommendations(
+                    lifestyle_modifications = listOf("Implement a low glycemic index diet to maintain HbA1c below 7.0%", "Encourage moderate-intensity exercise, 30 minutes daily, to reduce BMI to <25"),
+                    medication_management = listOf("Initiate low-dose aspirin for cardiovascular risk reduction", "Administer broad-spectrum antibiotics for fever management, monitor renal function"),
+                    monitor_vital_signs = listOf("Implement continuous pulse oximetry for respiratory rate above 20", "Schedule blood pressure checks every 4 hours, target range 120/80 mmHg")
+                )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(640.dp)
+                    .height(740.dp)
                     .background(Color.Transparent)
                     .padding(16.dp)
             ) {
@@ -129,61 +132,121 @@ fun GetPersonalisedTipsScreen(navController: NavController,
                         .background(Color(0x307987DF))
                 ) {
                     Row(modifier = Modifier.fillMaxWidth()) {
-                        // Left content area
-                        Column(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight()
-                                .padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
-                            verticalArrangement = Arrangement.Center
-                        ) {
 
-                            Text(
-                                text = "1. LifeStyle Modification",
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black,
-                                fontSize = 15.sp,
-                            )
-                            data.data.data.recommendations.lifestyle_modifications.forEach {
+                        if(!data.data.data.recommendations.monitor_vital_signs.isNullOrEmpty()) {
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight()
+                                    .padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
+                                verticalArrangement = Arrangement.Center
+                            ) {
+
                                 Text(
-                                    text = "• $it",
+                                    text = "1. LifeStyle Modification",
+                                    fontWeight = FontWeight.Bold,
                                     color = Color.Black,
                                     fontSize = 15.sp,
                                 )
-                            }
+                                data.data.data.recommendations.lifestyle_modifications.forEach {
+                                    Text(
+                                        text = "• $it",
+                                        color = Color.Black,
+                                        fontSize = 15.sp,
+                                    )
+                                }
 
-                            Text(
-                                text = "2. Medication Management",
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black
-                                ,fontSize = 15.sp,
-                                lineHeight = 4.sp
-
-                            )
-                            data.data.data.recommendations.medication_management.forEach {
                                 Text(
-                                    text = "• $it",
-                                    color = Color.Black,
-                                    fontSize = 15.sp,
+                                    text = "2. Medication Management",
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black
+                                    ,fontSize = 15.sp,
+                                    lineHeight = 4.sp
+
                                 )
-                            }
+                                data.data.data.recommendations.medication_management.forEach {
+                                    Text(
+                                        text = "• $it",
+                                        color = Color.Black,
+                                        fontSize = 15.sp,
+                                    )
+                                }
 
-                            Text(
-                                text = "2. Monitor Vital Signs",
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black
-                                ,fontSize = 15.sp,
-
-                            )
-                            data.data.data.recommendations.monitor_vital_signs.forEach {
                                 Text(
-                                    text = "• $it",
-                                    color = Color.Black,
-                                    fontSize = 15.sp,
-                                )
-                            }
+                                    text = "3. Monitor Vital Signs",
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black
+                                    ,fontSize = 15.sp,
 
+                                    )
+                                data.data.data.recommendations.monitor_vital_signs.forEach {
+                                    Text(
+                                        text = "• $it",
+                                        color = Color.Black,
+                                        fontSize = 15.sp,
+                                    )
+                                }
+
+                            }
                         }
+
+                        else {
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight()
+                                    .padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
+                                verticalArrangement = Arrangement.Center
+                            ) {
+
+                                Text(
+                                    text = "1. LifeStyle Modification",
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black,
+                                    fontSize = 15.sp,
+                                )
+                                listOfDummyReco.lifestyle_modifications.forEach {
+                                    Text(
+                                        text = "• $it",
+                                        color = Color.Black,
+                                        fontSize = 15.sp,
+                                    )
+                                }
+
+                                Text(
+                                    text = "2. Medication Management",
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black
+                                    ,fontSize = 15.sp,
+                                    lineHeight = 4.sp
+
+                                )
+                                listOfDummyReco.medication_management.forEach {
+                                    Text(
+                                        text = "• $it",
+                                        color = Color.Black,
+                                        fontSize = 15.sp,
+                                    )
+                                }
+
+                                Text(
+                                    text = "2. Monitor Vital Signs",
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black
+                                    ,fontSize = 15.sp,
+
+                                    )
+                                listOfDummyReco.monitor_vital_signs.forEach {
+                                    Text(
+                                        text = "• $it",
+                                        color = Color.Black,
+                                        fontSize = 15.sp,
+                                    )
+                                }
+
+                            }
+                        }
+
 
                         // Right colored strip
                         Box(

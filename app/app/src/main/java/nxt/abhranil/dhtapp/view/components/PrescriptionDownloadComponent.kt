@@ -1,5 +1,8 @@
 package nxt.abhranil.dhtapp.view.components
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,12 +24,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImagePainter
 import nxt.abhranil.dhtapp.R
 
 @Composable
-fun PrescriptionDownloadComponent() {
+fun PrescriptionDownloadComponent(imageUrl: String) {
+
+    val context = LocalContext.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,7 +56,11 @@ fun PrescriptionDownloadComponent() {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Button(
-                onClick = { /* Handle download action */ },
+                onClick = {
+                    // Handle download button click
+                    // You can use the imageUrl to download the prescription
+                    openImageInBrowser(context, imageUrl)
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E3A8A)),
                 shape = RoundedCornerShape(12.dp)
             ) {
@@ -60,14 +71,22 @@ fun PrescriptionDownloadComponent() {
                 )
             }
         }
-        Image(
-            painter = painterResource(id = R.drawable.bg1), // Replace with your image resource
-            contentDescription = "Prescription",
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .weight(1f)
-                .padding(8.dp)
-                .clip(RoundedCornerShape(8.dp))
-        )
+        ShimmerImage(modifier = Modifier
+            .weight(1f)
+            .padding(8.dp)
+            .clip(RoundedCornerShape(8.dp)),
+            imgUrl = imageUrl)
+    }
+}
+
+fun openImageInBrowser(context: Context, imageUrl: String) {
+    try {
+        val browserIntent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(imageUrl)
+        }
+        context.startActivity(browserIntent)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        // Handle the error (e.g., notify the user if no browser is installed)
     }
 }
