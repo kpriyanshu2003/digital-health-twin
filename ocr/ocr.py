@@ -4,7 +4,7 @@ import pytesseract
 import re
 import json
 
-TESSERACT_PATH = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+TESSERACT_PATH = '/usr/bin/tesseract'
 IMAGE_PATH = 'res/handwritten.png'
 
 def get_ocr(path):
