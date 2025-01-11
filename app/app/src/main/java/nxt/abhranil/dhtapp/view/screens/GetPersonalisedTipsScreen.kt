@@ -88,7 +88,7 @@ fun GetPersonalisedTipsScreen(navController: NavController,
 
         is UiState.Loading -> {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(44.dp))
                 Text(
                     text = "Loading....",
                     fontWeight = FontWeight.Medium,
@@ -111,7 +111,7 @@ fun GetPersonalisedTipsScreen(navController: NavController,
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(740.dp)
+                    .height(640.dp)
                     .background(Color.Transparent)
                     .padding(16.dp)
             ) {
@@ -133,119 +133,174 @@ fun GetPersonalisedTipsScreen(navController: NavController,
                 ) {
                     Row(modifier = Modifier.fillMaxWidth()) {
 
-                        if(!data.data.data.recommendations.monitor_vital_signs.isNullOrEmpty()) {
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .fillMaxHeight()
-                                    .padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
-                                verticalArrangement = Arrangement.Center
-                            ) {
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                                .padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
+                            verticalArrangement = Arrangement.Center
+                        ) {
 
+                            Text(
+                                text = "1. LifeStyle Modification",
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black,
+                                fontSize = 15.sp,
+                            )
+                            listOfDummyReco.lifestyle_modifications.forEach {
                                 Text(
-                                    text = "1. LifeStyle Modification",
-                                    fontWeight = FontWeight.Bold,
+                                    text = "• $it",
                                     color = Color.Black,
                                     fontSize = 15.sp,
                                 )
-                                data.data.data.recommendations.lifestyle_modifications.forEach {
-                                    Text(
-                                        text = "• $it",
-                                        color = Color.Black,
-                                        fontSize = 15.sp,
-                                    )
-                                }
-
-                                Text(
-                                    text = "2. Medication Management",
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.Black
-                                    ,fontSize = 15.sp,
-                                    lineHeight = 4.sp
-
-                                )
-                                data.data.data.recommendations.medication_management.forEach {
-                                    Text(
-                                        text = "• $it",
-                                        color = Color.Black,
-                                        fontSize = 15.sp,
-                                    )
-                                }
-
-                                Text(
-                                    text = "3. Monitor Vital Signs",
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.Black
-                                    ,fontSize = 15.sp,
-
-                                    )
-                                data.data.data.recommendations.monitor_vital_signs.forEach {
-                                    Text(
-                                        text = "• $it",
-                                        color = Color.Black,
-                                        fontSize = 15.sp,
-                                    )
-                                }
-
                             }
-                        }
 
-                        else {
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .fillMaxHeight()
-                                    .padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
-                                verticalArrangement = Arrangement.Center
-                            ) {
+                            Text(
+                                text = "2. Medication Management",
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black
+                                ,fontSize = 15.sp,
+                                lineHeight = 4.sp
 
+                            )
+                            listOfDummyReco.medication_management.forEach {
                                 Text(
-                                    text = "1. LifeStyle Modification",
-                                    fontWeight = FontWeight.Bold,
+                                    text = "• $it",
                                     color = Color.Black,
                                     fontSize = 15.sp,
                                 )
-                                listOfDummyReco.lifestyle_modifications.forEach {
-                                    Text(
-                                        text = "• $it",
-                                        color = Color.Black,
-                                        fontSize = 15.sp,
-                                    )
-                                }
+                            }
 
-                                Text(
-                                    text = "2. Medication Management",
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.Black
-                                    ,fontSize = 15.sp,
-                                    lineHeight = 4.sp
+                            Text(
+                                text = "3. Monitor Vital Signs",
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black
+                                ,fontSize = 15.sp,
 
                                 )
-                                listOfDummyReco.medication_management.forEach {
-                                    Text(
-                                        text = "• $it",
-                                        color = Color.Black,
-                                        fontSize = 15.sp,
-                                    )
-                                }
-
+                            listOfDummyReco.monitor_vital_signs.forEach {
                                 Text(
-                                    text = "2. Monitor Vital Signs",
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.Black
-                                    ,fontSize = 15.sp,
-
-                                    )
-                                listOfDummyReco.monitor_vital_signs.forEach {
-                                    Text(
-                                        text = "• $it",
-                                        color = Color.Black,
-                                        fontSize = 15.sp,
-                                    )
-                                }
-
+                                    text = "• $it",
+                                    color = Color.Black,
+                                    fontSize = 15.sp,
+                                )
                             }
+
                         }
+
+//                        if(!data.data.data.recommendations.monitor_vital_signs.isNullOrEmpty()) {
+//                            Column(
+//                                modifier = Modifier
+//                                    .weight(1f)
+//                                    .fillMaxHeight()
+//                                    .padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
+//                                verticalArrangement = Arrangement.Center
+//                            ) {
+//
+//                                Text(
+//                                    text = "1. LifeStyle Modification",
+//                                    fontWeight = FontWeight.Bold,
+//                                    color = Color.Black,
+//                                    fontSize = 15.sp,
+//                                )
+//                                data.data.data.recommendations.lifestyle_modifications.forEach {
+//                                    Text(
+//                                        text = "• $it",
+//                                        color = Color.Black,
+//                                        fontSize = 15.sp,
+//                                    )
+//                                }
+//
+//                                Text(
+//                                    text = "2. Medication Management",
+//                                    fontWeight = FontWeight.Bold,
+//                                    color = Color.Black
+//                                    ,fontSize = 15.sp,
+//                                    lineHeight = 4.sp
+//
+//                                )
+//                                data.data.data.recommendations.medication_management.forEach {
+//                                    Text(
+//                                        text = "• $it",
+//                                        color = Color.Black,
+//                                        fontSize = 15.sp,
+//                                    )
+//                                }
+//
+//                                Text(
+//                                    text = "3. Monitor Vital Signs",
+//                                    fontWeight = FontWeight.Bold,
+//                                    color = Color.Black
+//                                    ,fontSize = 15.sp,
+//
+//                                    )
+//                                data.data.data.recommendations.monitor_vital_signs.forEach {
+//                                    Text(
+//                                        text = "• $it",
+//                                        color = Color.Black,
+//                                        fontSize = 15.sp,
+//                                    )
+//                                }
+//
+//                            }
+//                        }
+//
+//                        else {
+//                            Column(
+//                                modifier = Modifier
+//                                    .weight(1f)
+//                                    .fillMaxHeight()
+//                                    .padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
+//                                verticalArrangement = Arrangement.Center
+//                            ) {
+//
+//                                Text(
+//                                    text = "1. LifeStyle Modification",
+//                                    fontWeight = FontWeight.Bold,
+//                                    color = Color.Black,
+//                                    fontSize = 15.sp,
+//                                )
+//                                listOfDummyReco.lifestyle_modifications.forEach {
+//                                    Text(
+//                                        text = "• $it",
+//                                        color = Color.Black,
+//                                        fontSize = 15.sp,
+//                                    )
+//                                }
+//
+//                                Text(
+//                                    text = "2. Medication Management",
+//                                    fontWeight = FontWeight.Bold,
+//                                    color = Color.Black
+//                                    ,fontSize = 15.sp,
+//                                    lineHeight = 4.sp
+//
+//                                )
+//                                listOfDummyReco.medication_management.forEach {
+//                                    Text(
+//                                        text = "• $it",
+//                                        color = Color.Black,
+//                                        fontSize = 15.sp,
+//                                    )
+//                                }
+//
+//                                Text(
+//                                    text = "2. Monitor Vital Signs",
+//                                    fontWeight = FontWeight.Bold,
+//                                    color = Color.Black
+//                                    ,fontSize = 15.sp,
+//
+//                                    )
+//                                listOfDummyReco.monitor_vital_signs.forEach {
+//                                    Text(
+//                                        text = "• $it",
+//                                        color = Color.Black,
+//                                        fontSize = 15.sp,
+//                                    )
+//                                }
+//
+//                            }
+//                        }
 
 
                         // Right colored strip

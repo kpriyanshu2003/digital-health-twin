@@ -97,7 +97,7 @@ fun PreviousDoctorsScreen(navController: NavController,
 
         is UiState.Loading -> {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(44.dp))
                 Text(
                     text = "Loading....",
                     fontWeight = FontWeight.Medium,
@@ -119,12 +119,14 @@ fun PreviousDoctorsScreen(navController: NavController,
             ) {
                 Spacer(modifier = Modifier.height(56.dp))
                 Text(
+                    modifier = Modifier
+                        .padding(start = 4.dp),
                     text = "Previously Consulted Doctors",
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
                 LazyColumn {
                     items(data.data.data.size) { index ->
@@ -136,7 +138,7 @@ fun PreviousDoctorsScreen(navController: NavController,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp),
-                            colors = CardDefaults.cardColors(Color(0xFFF1F1F1)),
+                            colors = CardDefaults.cardColors(Color(0x80F1F1F1)),
                             border = BorderStroke(1.dp, Color.Transparent),
                             shape = RoundedCornerShape(24.dp)
                         ) {
@@ -148,7 +150,7 @@ fun PreviousDoctorsScreen(navController: NavController,
                                     text = data.data.data[index].name,
                                     fontWeight = FontWeight.Bold,
                                     color = Color.Black,
-                                    style = MaterialTheme.typography.headlineSmall
+                                    fontSize = 20.sp
                                 )
 
                                 HorizontalDivider(

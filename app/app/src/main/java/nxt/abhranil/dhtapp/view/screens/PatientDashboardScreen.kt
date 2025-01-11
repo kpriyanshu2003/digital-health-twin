@@ -50,6 +50,7 @@ import nxt.abhranil.dhtapp.view.components.MetricCard
 import nxt.abhranil.dhtapp.view.navigation.DHTAppScreens
 import nxt.abhranil.dhtapp.vm.DHTViewModel
 import java.util.Calendar
+import kotlin.random.Random
 
 @Composable
 fun PatientDashboardScreen(navController: NavController,
@@ -149,6 +150,7 @@ fun PatientDashboardScreen(navController: NavController,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Button(modifier = Modifier
+                        .padding(end = 8.dp)
                         .size(80.dp), onClick = {
                         navController.navigate(DHTAppScreens.AppointmentUploadScreen.route)
                     }, shape = RoundedCornerShape(12.dp),
@@ -193,7 +195,7 @@ fun PatientDashboardScreen(navController: NavController,
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            AlertCard(message = "! Edema spike - Reduce sodium intake, consider a diuretic dose adjustment.")
+                            AlertCard(message = "! Schedule blood pressure checks every 4 hours, target range 120/80 mmHg.")
                             Spacer(modifier = Modifier.height(16.dp))
 
                             // Buttons
@@ -215,6 +217,8 @@ fun PatientDashboardScreen(navController: NavController,
 
     @Composable
     fun HealthMetricsGrid(listOfMetrics: List<Result>) {
+
+        val limitedMetrics = listOfMetrics.take(9)
 
         Row(
             horizontalArrangement = Arrangement.Start,
@@ -239,7 +243,7 @@ fun PatientDashboardScreen(navController: NavController,
             Column(
                 horizontalAlignment = Alignment.Start
             ) {
-                for (i in listOfMetrics.chunked(3)) {
+                for (i in limitedMetrics.chunked(3)) {
                     Row(
                         modifier = Modifier.fillMaxWidth()
                             .padding(4.dp),
@@ -273,8 +277,10 @@ fun RiskIndicator() {
                 .border(width = 4.dp, color = Color(0xFF1E2F98), shape = CircleShape),
             contentAlignment = Alignment.Center
         ) {
+            val randomFloat: Float = (8 + Random.nextFloat() * (11 - 8))
+                .let { "%.2f".format(it).toFloat() }
             Text(
-                text = "5.26 %",
+                text = "8.96 %",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black

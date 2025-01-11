@@ -101,7 +101,7 @@ fun DiseaseDetailScreen(navController: NavController,
 
         is UiState.Loading -> {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(44.dp))
                 Text(
                     text = "Loading....",
                     fontWeight = FontWeight.Medium,
@@ -123,7 +123,7 @@ fun DiseaseDetailScreen(navController: NavController,
             ) {
                 Spacer(modifier = Modifier.height(56.dp))
                 Text(
-                    text = data.data.data.condition.name,
+                    text = data.data.data.condition.name.trim('"'),
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
@@ -150,7 +150,7 @@ fun DiseaseDetailScreen(navController: NavController,
                                     modifier = Modifier
                                         .weight(1f)
                                         .fillMaxHeight()
-                                        .padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
+                                        .padding(start = 16.dp, top = 10.dp, bottom = 10.dp),
                                     verticalArrangement = Arrangement.Center
                                 ) {
                                     // Section 1: Currently Suffering From
@@ -207,7 +207,7 @@ fun DiseaseDetailScreen(navController: NavController,
                     },
                     fontSize = 16.sp,
                     textAlign = TextAlign.Start,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier.padding(start = 4.dp, bottom = 16.dp)
                 )
                 Text(
                     text = buildAnnotatedString {
@@ -218,7 +218,8 @@ fun DiseaseDetailScreen(navController: NavController,
                         append(medication)
                     },
                     fontSize = 16.sp,
-                    textAlign = TextAlign.Start
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.padding(start = 4.dp, bottom = 16.dp)
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))

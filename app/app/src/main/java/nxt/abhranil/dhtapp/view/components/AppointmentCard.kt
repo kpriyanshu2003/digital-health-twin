@@ -30,8 +30,8 @@ fun AppointmentCard(
 ) {
     OutlinedCard(modifier = modifier
         .fillMaxWidth()
-        .padding(16.dp),
-        colors = CardDefaults.cardColors(Color(0xFFF1F1F1)),
+        .padding(vertical = 8.dp),
+        colors = CardDefaults.cardColors(Color(0x80F1F1F1)),
         border = BorderStroke(1.dp, Color.Transparent),
         shape = RoundedCornerShape(24.dp)) {
         Column(modifier = Modifier.padding(16.dp),

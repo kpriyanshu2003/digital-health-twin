@@ -53,7 +53,7 @@ fun InfoCard(
                     lineHeight = 4.sp
                 )
                 Text(
-                    text = disease,
+                    text = disease.trim('"'),
                     color = Color.Black,
                     fontSize = 15.sp,
                     lineHeight = 4.sp
@@ -69,7 +69,7 @@ fun InfoCard(
 
                 )
                 Text(
-                    text = medication,
+                    text = medication.trim('[',']'),
                     color = Color.Black,
                     fontSize = 15.sp,
                     lineHeight = 4.sp,

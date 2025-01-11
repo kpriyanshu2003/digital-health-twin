@@ -81,7 +81,7 @@ fun MedicalHistoryScreen(navController: NavController,
 
         is UiState.Loading -> {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(44.dp))
                 Text(
                     text = "Loading....",
                     fontWeight = FontWeight.Medium,
@@ -103,12 +103,14 @@ fun MedicalHistoryScreen(navController: NavController,
             ) {
                 Spacer(modifier = Modifier.height(56.dp))
                 Text(
+                    modifier = Modifier
+                        .padding(start = 4.dp),
                     text = "Medical History",
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
                 LazyColumn {
                     items(data.data.appointments.size) {
